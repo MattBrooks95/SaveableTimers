@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">SaveableTimers</string>
+    <string name="navigate_create_timer">Create Timer</string>
+    <string name="navigate_saved_timers">Saved Timers</string>
 </resources>
