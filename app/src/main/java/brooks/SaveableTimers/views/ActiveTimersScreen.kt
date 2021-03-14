@@ -1,5 +1,6 @@
 package brooks.SaveableTimers.views
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +23,8 @@ class ActiveTimersScreen: AppCompatActivity() {
         val toCreateTimerScreenButton = binding.navigateCreateTimerButton
         toCreateTimerScreenButton.setOnClickListener {
             Log.d(className, "Go to make timer screen")
+            val goToCreateTimerIntent = Intent(this, CreateTimerScreen::class.java)
+            startActivity(goToCreateTimerIntent)
         }
 
         val toSavedTimersScreenButton = binding.navigateSavedTimersButton

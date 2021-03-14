@@ -2,4 +2,6 @@
     <string name="app_name">SaveableTimers</string>
     <string name="navigate_create_timer">Create Timer</string>
     <string name="navigate_saved_timers">Saved Timers</string>
+    <string name="create_timer">Create</string>
+    <string name="cancel_create_timer">cancel</string>
 </resources>
