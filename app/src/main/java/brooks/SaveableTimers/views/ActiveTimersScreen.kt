@@ -30,6 +30,8 @@ class ActiveTimersScreen: AppCompatActivity() {
         val toSavedTimersScreenButton = binding.navigateSavedTimersButton
         toSavedTimersScreenButton.setOnClickListener {
             Log.d(className, "go to saved timers screen")
+            val goToSavedTimersScreenIntent = Intent(this, SavedTimersScreen::class.java)
+            startActivity(goToSavedTimersScreenIntent);
         }
     }
 }

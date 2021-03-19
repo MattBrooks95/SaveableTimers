@@ -5,5 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".views.SavedTimersScreen">
-
+<com.google.android.material.button.MaterialButton
+    android:id="@+id/navigate_active_timers_button"
+    android:layout_width="wrap_content"
+    android:layout_height="50dp"
+    android:text="@string/go_to_active_timers"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"></com.google.android.material.button.MaterialButton>
 </androidx.constraintlayout.widget.ConstraintLayout>
