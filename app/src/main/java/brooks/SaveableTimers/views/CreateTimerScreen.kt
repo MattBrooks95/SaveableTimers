@@ -32,21 +32,24 @@ class CreateTimerScreen : AppCompatActivity() {
 
     private fun createDurationButtons() {
         val buttonContainer = binding.timerDurationButtonsContainer
-        val durationField = binding.durationTextInput
-        val durationText = durationField.text
         val buttonSettings: Array<Pair<String, Int>> = arrayOf(Pair("+20", 20), Pair("+10", 10), Pair("+5", 10), Pair("+1", 1))
-        buttonSettings.forEach {
-            val displayString = it.first;
-            val increaseValue = it.second;
+        buttonSettings.forEachIndexed { index, element ->
+            val displayString = element.first;
+            val increaseValue = element.second;
 
-            val newButton: MaterialButton = MaterialButton(this);
-            newButton.layoutParams = LinearLayout.LayoutParams(
+            val newButton: MaterialButton = MaterialButton(this)
+            val newLayoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT,
-                 0.25f
+                0.25f
             )
+            if (index != 0 ) newLayoutParams.marginStart = 2
+            newButton.layoutParams = newLayoutParams
+
             newButton.text = displayString
             newButton.setOnClickListener {
+                val durationField = binding.durationTextInput
+                val durationText = durationField.text
                 if (durationText != null) {
                     val durationTextString = durationText.toString()
                     var durationValue: Float = if (durationTextString.isNullOrEmpty()) 0.0f else durationTextString.toFloat()
