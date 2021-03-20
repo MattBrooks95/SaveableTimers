@@ -5,17 +5,25 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import brooks.SaveableTimers.data.AppDatabase
 import brooks.SaveableTimers.databinding.ActivityCreateTimerScreenBinding
 import com.google.android.material.button.MaterialButton
 
 private lateinit var binding: ActivityCreateTimerScreenBinding
 
 class CreateTimerScreen : AppCompatActivity() {
+    lateinit var db: AppDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCreateTimerScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        db = Room.databaseBuilder(
+            this,
+            AppDatabase::class.java, "database-name"
+        ).build()
         setHandlers()
         createDurationButtons()
     }
@@ -26,6 +34,8 @@ class CreateTimerScreen : AppCompatActivity() {
             startActivity(intent)
         }
         binding.createTimerButton.setOnClickListener {
+
+            val timerDao = db.saveableTimerDao()
             val intent = Intent(this, ActiveTimersScreen::class.java)
             startActivity(intent)
         }
