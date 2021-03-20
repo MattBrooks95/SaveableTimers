@@ -3,6 +3,7 @@ package brooks.SaveableTimers.views
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.LinearLayout
 import brooks.SaveableTimers.databinding.ActivityCreateTimerScreenBinding
 import com.google.android.material.button.MaterialButton
@@ -49,17 +50,21 @@ class CreateTimerScreen : AppCompatActivity() {
             newButton.layoutParams = newLayoutParams
 
             newButton.text = displayString
-            newButton.setOnClickListener {
-                val durationField = binding.durationTextInput
-                val durationText = durationField.text
-                if (durationText != null) {
-                    val durationTextString = durationText.toString()
-                    var durationValue: Float = if (durationTextString.isNullOrEmpty()) 0.0f else durationTextString.toFloat()
-                    durationValue += increaseValue
-                    durationField.setText(durationValue.toString())
-                }
+            newButton.setOnClickListener { view ->
+                durationIncreaseButtonHandler(view, increaseValue)
             }
             buttonContainer.addView(newButton)
+        }
+    }
+
+    private fun durationIncreaseButtonHandler(view: View, increaseValue: Int) {
+        val durationField = binding.durationTextInput
+        val durationText = durationField.text
+        if (durationText != null) {
+            val durationTextString = durationText.toString()
+            var durationValue: Float = if (durationTextString.isNullOrEmpty()) 0.0f else durationTextString.toFloat()
+            durationValue += increaseValue
+            durationField.setText(durationValue.toString())
         }
     }
 }
