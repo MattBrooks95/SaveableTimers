@@ -3,11 +3,13 @@ package brooks.SaveableTimers.views
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
 import android.view.View
 import android.widget.LinearLayout
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import brooks.SaveableTimers.data.AppDatabase
+import brooks.SaveableTimers.data.SaveableTimer
 import brooks.SaveableTimers.databinding.ActivityCreateTimerScreenBinding
 import com.google.android.material.button.MaterialButton
 
@@ -34,8 +36,11 @@ class CreateTimerScreen : AppCompatActivity() {
             startActivity(intent)
         }
         binding.createTimerButton.setOnClickListener {
-
+            val durationTextInput = binding.durationTextInput.text
+            if (durationTextInput.isNullOrEmpty()) return@setOnClickListener
             val timerDao = db.saveableTimerDao()
+            var newSaveableTimer = SaveableTimer(1, binding.timerNameField.text.toString(), getDurationFloatFromEditableText(durationTextInput))
+            timerDao.insertAll(newSaveableTimer)
             val intent = Intent(this, ActiveTimersScreen::class.java)
             startActivity(intent)
         }
@@ -71,10 +76,14 @@ class CreateTimerScreen : AppCompatActivity() {
         val durationField = binding.durationTextInput
         val durationText = durationField.text
         if (durationText != null) {
-            val durationTextString = durationText.toString()
-            var durationValue: Float = if (durationTextString.isNullOrEmpty()) 0.0f else durationTextString.toFloat()
+            var durationValue: Int = getDurationFloatFromEditableText(durationText)
             durationValue += increaseValue
             durationField.setText(durationValue.toString())
         }
+    }
+
+    private fun getDurationFloatFromEditableText(editText: Editable): Int {
+        val editableAsString = editText.toString()
+        return if (editableAsString.isNullOrEmpty()) 0 else editableAsString.toInt()
     }
 }
