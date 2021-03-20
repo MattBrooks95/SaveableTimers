@@ -5,4 +5,5 @@
     <string name="create_timer">Create</string>
     <string name="cancel_create_timer">cancel</string>
     <string name="go_to_active_timers">Active Timers</string>
+    <string name="timer_name_field_label">Timer Name</string>
 </resources>
