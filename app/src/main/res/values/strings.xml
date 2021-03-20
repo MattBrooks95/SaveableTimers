@@ -7,4 +7,5 @@
     <string name="go_to_active_timers">Active Timers</string>
     <string name="timer_name_field_label">Timer Name</string>
     <string name="timer_name_hint">Timer Description</string>
+    <string name="timer_duration_entry_hint">Timer Duration</string>
 </resources>
