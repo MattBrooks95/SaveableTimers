@@ -1,6 +1,7 @@
 package brooks.SaveableTimers.views
 
 import android.content.Intent
+import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
@@ -28,17 +29,19 @@ class SavedTimersScreen : AppCompatActivity() {
         ).build()
         setHandlers()
 
-        val timersArray: List<SaveableTimer> = loadTimers()
-        timersArray.forEach {
-            val displayNameView = TextView(this)
-            displayNameView.text = it.displayName
+        AsyncTask.execute{
+            val timersArray: List<SaveableTimer> = loadTimers()
+            timersArray.forEach {
+                val displayNameView = TextView(this)
+                displayNameView.text = it.displayName
 
-            val durationNameView = TextView(this)
-            val duration = it.duration
-            if (duration !== null) durationNameView.text = duration.toString()
+                val durationNameView = TextView(this)
+                val duration = it.duration
+                if (duration !== null) durationNameView.text = duration.toString()
 
-            binding.savedTimersContainer.addView(displayNameView)
-            binding.savedTimersContainer.addView(durationNameView)
+                binding.savedTimersContainer.addView(displayNameView)
+                binding.savedTimersContainer.addView(durationNameView)
+            }
         }
     }
 
