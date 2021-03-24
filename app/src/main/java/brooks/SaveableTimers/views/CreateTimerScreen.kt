@@ -42,7 +42,9 @@ class CreateTimerScreen : AppCompatActivity() {
             val durationTextInput = binding.durationTextInput.text
             if (durationTextInput.isNullOrEmpty()) return@setOnClickListener
             val timerDao = db.saveableTimerDao()
-            var newSaveableTimer = SaveableTimer(1, binding.timerNameField.text.toString(), getDurationFloatFromEditableText(durationTextInput))
+            //the ID is auto generated, but when you make an instance of the DAO you have to specify a value, so setting the int to 0
+            //is necessary. I had it set to 1, and it would crash because it would use 1 on the insert, and violate primary key uniqueness
+            var newSaveableTimer = SaveableTimer(0, binding.timerNameField.text.toString(), getDurationFloatFromEditableText(durationTextInput))
             scope.launch {
                 timerDao.insertAll(newSaveableTimer)
             }
