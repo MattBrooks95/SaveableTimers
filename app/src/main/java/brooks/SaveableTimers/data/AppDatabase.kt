@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [SaveableTimer::class], version=1)
+@Database(entities = [SaveableTimer::class], version=3)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun saveableTimerDao(): SaveableTimerDao
 
@@ -23,7 +23,7 @@ abstract class AppDatabase : RoomDatabase() {
             return Room.databaseBuilder(
                     context,
                     AppDatabase::class.java, "database-name"
-            ).build()
+            ).fallbackToDestructiveMigration().build()
         }
 
     }
