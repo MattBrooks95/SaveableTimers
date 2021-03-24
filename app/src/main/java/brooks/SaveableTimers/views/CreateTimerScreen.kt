@@ -56,7 +56,7 @@ class CreateTimerScreen : AppCompatActivity() {
 
     private fun createDurationButtons() {
         val buttonContainer = binding.timerDurationButtonsContainer
-        val buttonSettings: Array<Pair<String, Int>> = arrayOf(Pair("+20", 20), Pair("+10", 10), Pair("+5", 10), Pair("+1", 1))
+        val buttonSettings: Array<Pair<String, Int>> = arrayOf(Pair("+20", 20), Pair("+10", 10), Pair("+5", 5), Pair("+1", 1))
         val newLayoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT,
