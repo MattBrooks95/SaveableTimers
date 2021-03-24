@@ -10,5 +10,5 @@ interface SaveableTimerDao {
     suspend fun getAll(): List<SaveableTimer>
 
     @Insert
-    fun insertAll(vararg saveableTimers: SaveableTimer)
+    suspend fun insertAll(vararg saveableTimers: SaveableTimer)
 }

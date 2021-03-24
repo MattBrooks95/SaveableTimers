@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import androidx.room.Room
@@ -12,20 +13,22 @@ import brooks.SaveableTimers.data.AppDatabase
 import brooks.SaveableTimers.data.SaveableTimer
 import brooks.SaveableTimers.databinding.ActivityCreateTimerScreenBinding
 import com.google.android.material.button.MaterialButton
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 
 private lateinit var binding: ActivityCreateTimerScreenBinding
 
 class CreateTimerScreen : AppCompatActivity() {
+    private var scope: CoroutineScope = MainScope()
+    private val className: String = "CreateTimerScreen"
     lateinit var db: AppDatabase
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCreateTimerScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        db = AppDatabase.getInstance(this)
 
-        db = Room.databaseBuilder(
-            this,
-            AppDatabase::class.java, "database-name"
-        ).build()
         setHandlers()
         createDurationButtons()
     }
@@ -40,7 +43,10 @@ class CreateTimerScreen : AppCompatActivity() {
             if (durationTextInput.isNullOrEmpty()) return@setOnClickListener
             val timerDao = db.saveableTimerDao()
             var newSaveableTimer = SaveableTimer(1, binding.timerNameField.text.toString(), getDurationFloatFromEditableText(durationTextInput))
-            timerDao.insertAll(newSaveableTimer)
+            scope.launch {
+                timerDao.insertAll(newSaveableTimer)
+            }
+            Log.d(className, "made a saveable timer entry")
             val intent = Intent(this, ActiveTimersScreen::class.java)
             startActivity(intent)
         }

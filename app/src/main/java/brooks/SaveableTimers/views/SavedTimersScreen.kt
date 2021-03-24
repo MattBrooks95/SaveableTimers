@@ -4,6 +4,7 @@ import android.content.Intent
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import androidx.room.Room
 import brooks.SaveableTimers.data.AppDatabase
@@ -20,6 +21,7 @@ private lateinit var binding: ActivitySavedTimersScreenBinding
 
 class SavedTimersScreen : AppCompatActivity() {
     lateinit var db: AppDatabase
+    private val className: String = "SavedTimersScreen"
     val scope = MainScope()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,19 +29,17 @@ class SavedTimersScreen : AppCompatActivity() {
         setContentView(binding.root)
         setHandlers()
 
-        db = Room.databaseBuilder(
-            this,
-            AppDatabase::class.java, "database-name"
-        ).build()
+        db = AppDatabase.getInstance(this)
         setHandlers()
 
         val appContext = this
 
         scope.launch{
             val timers: List<SaveableTimer> = loadTimers()
-            timers.forEachIndexed {index, timer ->
+            Log.d(className,"within the loop to make timer elements, length:" + timers.size)
+            timers.forEachIndexed {_, timer ->
                 val displayNameView = TextView(appContext)
-                displayNameView.text = timer.displayName
+                displayNameView.text = timer.displayName + "shrek"
 
                 val durationNameView = TextView(appContext)
                 val duration = timer.duration
