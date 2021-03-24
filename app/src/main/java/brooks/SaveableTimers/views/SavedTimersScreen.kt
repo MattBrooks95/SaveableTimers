@@ -1,7 +1,7 @@
 package brooks.SaveableTimers.views
 
 import android.content.Intent
-import android.os.AsyncTask
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
@@ -10,13 +10,17 @@ import brooks.SaveableTimers.data.AppDatabase
 import brooks.SaveableTimers.data.SaveableTimer
 
 import brooks.SaveableTimers.databinding.ActivitySavedTimersScreenBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 private lateinit var binding: ActivitySavedTimersScreenBinding
 
 
 class SavedTimersScreen : AppCompatActivity() {
     lateinit var db: AppDatabase
-
+    val scope = MainScope()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySavedTimersScreenBinding.inflate(layoutInflater)
@@ -29,20 +33,26 @@ class SavedTimersScreen : AppCompatActivity() {
         ).build()
         setHandlers()
 
-        AsyncTask.execute{
-            val timersArray: List<SaveableTimer> = loadTimers()
-            timersArray.forEach {
-                val displayNameView = TextView(this)
-                displayNameView.text = it.displayName
+        val appContext = this
 
-                val durationNameView = TextView(this)
-                val duration = it.duration
+        scope.launch{
+            val timers: List<SaveableTimer> = loadTimers()
+            timers.forEachIndexed {index, timer ->
+                val displayNameView = TextView(appContext)
+                displayNameView.text = timer.displayName
+
+                val durationNameView = TextView(appContext)
+                val duration = timer.duration
                 if (duration !== null) durationNameView.text = duration.toString()
 
                 binding.savedTimersContainer.addView(displayNameView)
                 binding.savedTimersContainer.addView(durationNameView)
             }
         }
+//        val timersArray: List<SaveableTimer> = loadTimers()
+//        timersArray.forEach {
+//
+//        }
     }
 
     private fun setHandlers() {
@@ -53,7 +63,7 @@ class SavedTimersScreen : AppCompatActivity() {
         }
     }
 
-    private fun loadTimers(): List<SaveableTimer> {
+    private suspend fun loadTimers(): List<SaveableTimer> {
         return db.saveableTimerDao().getAll()
     }
 }
