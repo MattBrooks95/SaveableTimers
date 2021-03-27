@@ -21,16 +21,14 @@ class SavedTimerPanel(val appContext: Context, val savedTimerData: SaveableTimer
         deleteButtonReference.isEnabled = false
         editButtonReference.isEnabled = false
         this.removeView(activateButtonReference)
-        //this starts at one for some reason, not 0
-        //it's probably cleaner to use a container and then put the button in the container
-        this.addView(deactivateButtonReference, 1)
+        this.addView(deactivateButtonReference, 0)
     }
 
     fun deactivate() {
         deleteButtonReference.isEnabled = true
         editButtonReference.isEnabled = true
         this.removeView(deactivateButtonReference)
-        this.addView(activateButtonReference, 1)
+        this.addView(activateButtonReference, 0)
     }
 
     private fun makeDisplayNameElement(displayName: String?): View {
@@ -70,6 +68,7 @@ class SavedTimerPanel(val appContext: Context, val savedTimerData: SaveableTimer
     private fun makeButton(text: String): MaterialButton {
         val newButton = MaterialButton(appContext)
         newButton.text = text
+        newButton.setPadding(0, 0, 0,0)
         return newButton
     }
 
