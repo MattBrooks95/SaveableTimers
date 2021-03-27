@@ -26,6 +26,7 @@ private lateinit var binding: ActivitySavedTimersScreenBinding
 class SavedTimersScreen : AppCompatActivity() {
     lateinit var db: AppDatabase
     private val className: String = "SavedTimersScreen"
+    private var timerViewMap: MutableMap<Int, SavedTimerPanel> = mutableMapOf()
     val scope = MainScope()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +50,7 @@ class SavedTimersScreen : AppCompatActivity() {
 
             timers.forEachIndexed {index, timer ->
                 val savedTimerView = buildViewForSavedTimer(timer)
+                timerViewMap.put(timer.uid, savedTimerView)
                 if (index > 0) newLayoutParams.marginStart = 5
                 binding.savedTimersContainer.addView(savedTimerView);
             }
@@ -61,9 +63,16 @@ class SavedTimersScreen : AppCompatActivity() {
 
     private fun deleteSavedTimer(uuid: Int) {
         Log.d(className, "delete uuid:$uuid")
+        val savedTimerPanel = timerViewMap[uuid];
+        if (savedTimerPanel !== null) {
+            scope.launch {
+                val timerDao = db.saveableTimerDao()
+                timerDao.deleteAll(savedTimerPanel.savedTimerData);
+            }
+        }
     }
 
-    private fun buildViewForSavedTimer(savedTimer: SaveableTimer): View {
+    private fun buildViewForSavedTimer(savedTimer: SaveableTimer): SavedTimerPanel {
         val savedTimerPanel = SavedTimerPanel(this, savedTimer)
         //this double colon syntax was necessary to pass the method as a parameter
         savedTimerPanel.setEditButtonCallback(::editSavedTimer)

@@ -1,6 +1,7 @@
 package brooks.SaveableTimers.data
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 
@@ -11,4 +12,7 @@ interface SaveableTimerDao {
 
     @Insert
     suspend fun insertAll(vararg saveableTimers: SaveableTimer)
+
+    @Delete
+    suspend fun deleteAll(vararg saveableTimers: SaveableTimer)
 }
