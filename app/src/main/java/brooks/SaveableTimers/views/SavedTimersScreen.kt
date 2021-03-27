@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.room.Room
 import brooks.SaveableTimers.components.SavedTimerPanel
@@ -39,31 +41,34 @@ class SavedTimersScreen : AppCompatActivity() {
         scope.launch{
             val timers: List<SaveableTimer> = loadTimers()
             Log.d(className,"within the loop to make timer elements, length:" + timers.size)
-            timers.forEachIndexed {_, timer ->
+
+            val newLayoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+
+            timers.forEachIndexed {index, timer ->
                 val savedTimerView = buildViewForSavedTimer(timer)
-//                binding.savedTimersContainer.addView(displayNameView)
-//                binding.savedTimersContainer.addView(durationNameView)
+                if (index > 0) newLayoutParams.marginStart = 5
                 binding.savedTimersContainer.addView(savedTimerView);
             }
         }
-//        val timersArray: List<SaveableTimer> = loadTimers()
-//        timersArray.forEach {
-//
-//        }
+    }
+
+    private fun editSavedTimer(uuid: Int) {
+        Log.d(className, "edit uuid:$uuid")
+    }
+
+    private fun deleteSavedTimer(uuid: Int) {
+        Log.d(className, "delete uuid:$uuid")
     }
 
     private fun buildViewForSavedTimer(savedTimer: SaveableTimer): View {
-
-        return SavedTimerPanel(this, savedTimer)
-
-//                val displayNameView = TextView(appContext)
-//                displayNameView.text = timer.displayName + "shrek"
-//
-//                val durationNameView = TextView(appContext)
-//                val duration = timer.duration
-//                if (duration !== null) durationNameView.text = duration.toString()
-//
-
+        val savedTimerPanel = SavedTimerPanel(this, savedTimer)
+        //this double colon syntax was necessary to pass the method as a parameter
+        savedTimerPanel.setEditButtonCallback(::editSavedTimer)
+        savedTimerPanel.setDeleteButtonCallback(::deleteSavedTimer)
+        return savedTimerPanel
     }
 
     private fun setHandlers() {
