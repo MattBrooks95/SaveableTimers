@@ -44,7 +44,7 @@ class CreateTimerScreen : AppCompatActivity() {
             val timerDao = db.saveableTimerDao()
             //the ID is auto generated, but when you make an instance of the DAO you have to specify a value, so setting the int to 0
             //is necessary. I had it set to 1, and it would crash because it would use 1 on the insert, and violate primary key uniqueness
-            var newSaveableTimer = SaveableTimer(0, binding.timerNameField.text.toString(), getDurationFloatFromEditableText(durationTextInput))
+            var newSaveableTimer = SaveableTimer(0, binding.timerNameField.text.toString(), getDurationFloatFromEditableText(durationTextInput), binding.timerDescriptionField.text.toString())
             scope.launch {
                 timerDao.insertAll(newSaveableTimer)
             }
