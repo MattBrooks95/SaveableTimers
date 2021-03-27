@@ -57,10 +57,12 @@ class SavedTimersScreen : AppCompatActivity() {
         }
     }
 
+    //TODO boot up create screen, pre-pop the current data and then allow them to re-save it
     private fun editSavedTimer(uuid: Int) {
         Log.d(className, "edit uuid:$uuid")
     }
 
+    //TODO some sort of confirmation?
     private fun deleteSavedTimer(uuid: Int) {
         Log.d(className, "delete uuid:$uuid")
         val savedTimerPanel = timerViewMap[uuid];
@@ -68,8 +70,13 @@ class SavedTimersScreen : AppCompatActivity() {
             scope.launch {
                 val timerDao = db.saveableTimerDao()
                 timerDao.deleteAll(savedTimerPanel.savedTimerData);
+                binding.savedTimersContainer.removeView(savedTimerPanel)
             }
         }
+    }
+
+    private fun activateTimer(uuid: Int) {
+        Log.d(className, "activate timer:$uuid")
     }
 
     private fun buildViewForSavedTimer(savedTimer: SaveableTimer): SavedTimerPanel {
@@ -77,6 +84,7 @@ class SavedTimersScreen : AppCompatActivity() {
         //this double colon syntax was necessary to pass the method as a parameter
         savedTimerPanel.setEditButtonCallback(::editSavedTimer)
         savedTimerPanel.setDeleteButtonCallback(::deleteSavedTimer)
+        savedTimerPanel.setActivateButtonCallback(::activateTimer)
         return savedTimerPanel
     }
 

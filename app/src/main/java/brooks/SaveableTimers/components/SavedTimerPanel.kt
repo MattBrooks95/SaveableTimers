@@ -10,6 +10,7 @@ import com.google.android.material.button.MaterialButton
 class SavedTimerPanel(val appContext: Context, val savedTimerData: SaveableTimer) : LinearLayout(appContext) {
     lateinit var deleteButtonReference: View
     lateinit var editButtonReference: View
+    lateinit var activateButtonReference: View
 
     private fun makeDisplayNameElement(displayName: String?): View {
         val newTextView = TextView(appContext)
@@ -39,6 +40,18 @@ class SavedTimerPanel(val appContext: Context, val savedTimerData: SaveableTimer
         return makeEditButton
     }
 
+    private fun makeActivateButton(savedTimerId: Int): MaterialButton {
+        val activateButton = MaterialButton(appContext);
+        activateButton.text = "A"
+        return activateButton
+    }
+
+    fun setActivateButtonCallback(onClick: (uid: Int) -> Unit) {
+        activateButtonReference.setOnClickListener {
+            onClick(savedTimerData.uid)
+        }
+    }
+
     fun setDeleteButtonCallback(onClick: (uid: Int) -> Unit) {
         deleteButtonReference.setOnClickListener {
             onClick(savedTimerData.uid)
@@ -62,9 +75,19 @@ class SavedTimerPanel(val appContext: Context, val savedTimerData: SaveableTimer
         val editButton = makeEditButton(savedTimerData.uid)
         editButtonReference = editButton
 
+        val activateButton = makeActivateButton(savedTimerData.uid)
+        activateButtonReference = activateButton
+
         this.tag = savedTimerData
 
-        listOf(displayName, duration, description, editButton, deleteButton).forEach {
+        listOf(
+            activateButton,
+            displayName,
+            duration,
+            description,
+            editButton,
+            deleteButton
+        ).forEach {
             this.addView(it)
         }
     }
