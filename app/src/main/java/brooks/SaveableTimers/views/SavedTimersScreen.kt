@@ -77,6 +77,18 @@ class SavedTimersScreen : AppCompatActivity() {
 
     private fun activateTimer(uuid: Int) {
         Log.d(className, "activate timer:$uuid")
+        val savedTimerPanel = timerViewMap[uuid]
+        if (savedTimerPanel !== null) {
+            savedTimerPanel.activate()
+        }
+    }
+
+    private fun deactivateTimer(uuid: Int) {
+        Log.d(className, "deactivate timer:$uuid")
+        val savedTimerPanel = timerViewMap[uuid]
+        if (savedTimerPanel !== null) {
+            savedTimerPanel.deactivate()
+        }
     }
 
     private fun buildViewForSavedTimer(savedTimer: SaveableTimer): SavedTimerPanel {
@@ -85,6 +97,7 @@ class SavedTimersScreen : AppCompatActivity() {
         savedTimerPanel.setEditButtonCallback(::editSavedTimer)
         savedTimerPanel.setDeleteButtonCallback(::deleteSavedTimer)
         savedTimerPanel.setActivateButtonCallback(::activateTimer)
+        savedTimerPanel.setDeactivateButtonCallback(::deactivateTimer)
         return savedTimerPanel
     }
 

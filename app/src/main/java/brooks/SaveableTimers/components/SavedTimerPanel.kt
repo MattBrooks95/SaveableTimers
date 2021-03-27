@@ -1,16 +1,37 @@
 package brooks.SaveableTimers.components
 
 import android.content.Context
+import android.graphics.Color
 import android.view.View
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.content.ContextCompat
+import brooks.SaveableTimers.R
 import brooks.SaveableTimers.data.SaveableTimer
 import com.google.android.material.button.MaterialButton
 
 class SavedTimerPanel(val appContext: Context, val savedTimerData: SaveableTimer) : LinearLayout(appContext) {
-    lateinit var deleteButtonReference: View
-    lateinit var editButtonReference: View
-    lateinit var activateButtonReference: View
+    lateinit var deleteButtonReference: Button
+    lateinit var editButtonReference: Button
+    lateinit var activateButtonReference: Button
+    lateinit var deactivateButtonReference: Button
+
+    fun activate() {
+        deleteButtonReference.isEnabled = false
+        editButtonReference.isEnabled = false
+        this.removeView(activateButtonReference)
+        //this starts at one for some reason, not 0
+        //it's probably cleaner to use a container and then put the button in the container
+        this.addView(deactivateButtonReference, 1)
+    }
+
+    fun deactivate() {
+        deleteButtonReference.isEnabled = true
+        editButtonReference.isEnabled = true
+        this.removeView(deactivateButtonReference)
+        this.addView(activateButtonReference, 1)
+    }
 
     private fun makeDisplayNameElement(displayName: String?): View {
         val newTextView = TextView(appContext)
@@ -40,10 +61,27 @@ class SavedTimerPanel(val appContext: Context, val savedTimerData: SaveableTimer
         return makeEditButton
     }
 
-    private fun makeActivateButton(savedTimerId: Int): MaterialButton {
-        val activateButton = MaterialButton(appContext);
-        activateButton.text = "A"
-        return activateButton
+    private fun makeButtonWithBackgroundColor(text: String, backgroundColor: Int): MaterialButton {
+        val newButton = makeButton(text)
+        newButton.setBackgroundColor(backgroundColor)
+        return newButton
+    }
+
+    private fun makeButton(text: String): MaterialButton {
+        val newButton = MaterialButton(appContext)
+        newButton.text = text
+        return newButton
+    }
+
+    private fun makeActivateButton(): MaterialButton {
+//        val activateButton = MaterialButton(appContext);
+//        activateButton.text = "A"
+//        return activateButton
+        return makeButton("A")
+    }
+
+    private fun makeDeactivateButton(text: String, backgroundColor: Int): MaterialButton {
+        return makeButtonWithBackgroundColor(text, backgroundColor)
     }
 
     fun setActivateButtonCallback(onClick: (uid: Int) -> Unit) {
@@ -64,6 +102,12 @@ class SavedTimerPanel(val appContext: Context, val savedTimerData: SaveableTimer
         }
     }
 
+    fun setDeactivateButtonCallback(onClick: (uid: Int) -> Unit) {
+        deactivateButtonReference.setOnClickListener {
+            onClick(savedTimerData.uid)
+        }
+    }
+
     init {
         val displayName = makeDisplayNameElement(savedTimerData.displayName)
         val duration = makeDurationElement(savedTimerData.duration)
@@ -75,8 +119,11 @@ class SavedTimerPanel(val appContext: Context, val savedTimerData: SaveableTimer
         val editButton = makeEditButton(savedTimerData.uid)
         editButtonReference = editButton
 
-        val activateButton = makeActivateButton(savedTimerData.uid)
+        val activateButton = makeActivateButton()
         activateButtonReference = activateButton
+
+        val deactivateButton = makeDeactivateButton("D", ContextCompat.getColor(appContext, R.color.stop))
+        deactivateButtonReference = deactivateButton
 
         this.tag = savedTimerData
 
