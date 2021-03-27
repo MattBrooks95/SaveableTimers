@@ -68,7 +68,6 @@ class SavedTimerPanel(val appContext: Context, val savedTimerData: SaveableTimer
     private fun makeButton(text: String): MaterialButton {
         val newButton = MaterialButton(appContext)
         newButton.text = text
-        newButton.setPadding(0, 0, 0,0)
         return newButton
     }
 
