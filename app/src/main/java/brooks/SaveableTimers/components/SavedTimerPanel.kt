@@ -48,15 +48,11 @@ class SavedTimerPanel(val appContext: Context, val savedTimerData: SaveableTimer
     }
 
     private fun makeDeleteButton(savedTimerId: Int): MaterialButton {
-        val deleteButton = MaterialButton(appContext)
-        deleteButton.text = "X"
-        return deleteButton
+        return makeButton("D")
     }
 
     private fun makeEditButton(savedTimerId: Int): MaterialButton {
-        val makeEditButton = MaterialButton(appContext)
-        makeEditButton.text = "E"
-        return makeEditButton
+        return makeButton("E")
     }
 
     private fun makeButtonWithBackgroundColor(text: String, backgroundColor: Int): MaterialButton {
