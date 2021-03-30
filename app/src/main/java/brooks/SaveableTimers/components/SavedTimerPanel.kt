@@ -38,25 +38,32 @@ class SavedTimerPanel(/*val appContext: Context, val savedTimerData: SaveableTim
         return binding.root
     }
 
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        populateFields()
-//    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        savedTimerName = arguments?.getString("name") ?: ""
+        savedTimerDescription = arguments?.getString("description") ?: ""
+        savedTimerId = arguments?.getInt("id") ?: 0
+        savedTimerDuration = arguments?.getInt("duration") ?: 0
+
+        populateFields()
+
+        populateFields()
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
-    override fun setArguments(args: Bundle?) {
-        super.setArguments(args)
-        savedTimerName = args?.getString("name") ?: ""
-        savedTimerDescription = args?.getString("description") ?: ""
-        //gotta be a better way to declare these...
-        savedTimerId = args?.getInt("id") ?: 0
-        savedTimerDuration = args?.getInt("duration") ?: 0
-
-        populateFields()
-    }
+//    override fun setArguments(args: Bundle?) {
+//        super.setArguments(args)
+//        savedTimerName = args?.getString("name") ?: ""
+//        savedTimerDescription = args?.getString("description") ?: ""
+//        //gotta be a better way to declare these...
+//        savedTimerId = args?.getInt("id") ?: 0
+//        savedTimerDuration = args?.getInt("duration") ?: 0
+//
+//        populateFields()
+//    }
 
     private fun populateFields() {
         binding.nameField.text = savedTimerName

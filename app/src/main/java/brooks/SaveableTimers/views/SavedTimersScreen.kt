@@ -50,9 +50,30 @@ class SavedTimersScreen : AppCompatActivity() {
 //                timerViewMap.put(timer.uid, savedTimerView)
 //                if (index > 0) newLayoutParams.marginStart = 5
 //                binding.savedTimersContainer.addView(savedTimerView);
+                val bundle = Bundle()
+                bundle.putString("name", timer.displayName)
+                bundle.putString("description", timer.description)
+                bundle.putInt("id", timer.uid)
+                bundle.putInt("duration", timer.duration)
+                //TODO why can't I use this?
+//                bundleOf(
+//                    "name" to timer.displayName,
+//                    "description" to timer.description,
+//                    "id" to timer.uid,
+//                    "duration" to timer.duration
+//                )
+
+//                savedTimerName = args?.getString("name") ?: ""
+//                savedTimerDescription = args?.getString("description") ?: ""
+//                //gotta be a better way to declare these...
+//                savedTimerId = args?.getInt("id") ?: 0
+//                savedTimerDuration = args?.getInt("duration") ?: 0
                 supportFragmentManager.commit{
                     setReorderingAllowed(true)
-                    add<SavedTimerPanel>(R.id.saved_timers_container)
+                    //why can't I do this like the tutorial? in the tutorial the add method lets you pass the bundle
+                    val newFragment = SavedTimerPanel()
+                    newFragment.arguments = bundle
+                    add(R.id.saved_timers_container, newFragment)
                 }
             }
         }
