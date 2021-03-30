@@ -41,14 +41,14 @@ class SavedTimersScreen : AppCompatActivity() {
             val timers: List<SaveableTimer> = loadTimers()
             Log.d(className,"within the loop to make timer elements, length:" + timers.size)
 
-            timers.forEachIndexed {index, timer ->
-                val bundle = Bundle()
-                bundle.putString("name", timer.displayName)
-                bundle.putString("description", timer.description)
-                bundle.putInt("id", timer.uid)
-                bundle.putInt("duration", timer.duration)
-
-                supportFragmentManager.commit{
+            supportFragmentManager.commit{
+                timers.forEachIndexed { index, timer ->
+                    val bundle = Bundle()
+                    bundle.putString("name", timer.displayName)
+                    bundle.putString("description", timer.description)
+                    bundle.putInt("id", timer.uid)
+                    bundle.putInt("duration", timer.duration)
+                    Log.d(className, "added timer with id:${timer.uid}")
                     setReorderingAllowed(true)
                     //why can't I do this like the tutorial? in the tutorial the add method lets you pass the bundle
                     val newFragment = SavedTimerPanel()
@@ -59,6 +59,7 @@ class SavedTimersScreen : AppCompatActivity() {
                     add(R.id.saved_timers_container, newFragment)
                 }
             }
+//            }
         }
     }
 
