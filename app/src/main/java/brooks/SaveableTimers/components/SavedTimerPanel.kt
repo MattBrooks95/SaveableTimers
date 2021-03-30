@@ -19,11 +19,14 @@ import com.google.android.material.button.MaterialButton
 import brooks.SaveableTimers.databinding.SavedTimerPanelBinding
 
 
-class SavedTimerPanel(/*val appContext: Context, val savedTimerData: SaveableTimer*/) : Fragment(R.layout.saved_timer_panel) {
+class SavedTimerPanel: Fragment(R.layout.saved_timer_panel) {
     lateinit var savedTimerName: String
     lateinit var savedTimerDescription: String
     private var savedTimerId: Int = 0
     private var savedTimerDuration: Int = 0
+
+    private lateinit var deleteCallback: (savedTimerId: Int) -> Unit?
+    private lateinit var editCallback: (savedTimerId: Int) -> Unit?
 
     //only valid in between onCreateView and onDestroyView
     private var _binding: SavedTimerPanelBinding? = null
@@ -39,19 +42,27 @@ class SavedTimerPanel(/*val appContext: Context, val savedTimerData: SaveableTim
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        savedTimerName = arguments?.getString("name") ?: ""
-        savedTimerDescription = arguments?.getString("description") ?: ""
-        savedTimerId = arguments?.getInt("id") ?: 0
-        savedTimerDuration = arguments?.getInt("duration") ?: 0
-
         populateFields()
-
-        populateFields()
+        setHandlers()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setHandlers() {
+        if (deleteCallback !== null) {
+            binding.deleteButton.setOnClickListener {
+                deleteCallback(savedTimerId)
+            }
+        }
+
+        if (editCallback !== null) {
+            binding.editButton.setOnClickListener {
+                editCallback(savedTimerId)
+            }
+        }
     }
 
 //    override fun setArguments(args: Bundle?) {
@@ -66,9 +77,10 @@ class SavedTimerPanel(/*val appContext: Context, val savedTimerData: SaveableTim
 //    }
 
     private fun populateFields() {
-        binding.nameField.text = savedTimerName
-        binding.durationField.text = savedTimerDuration.toString()
-        binding.descriptionField.text = savedTimerDescription
+        savedTimerName = arguments?.getString("name") ?: ""
+        savedTimerDescription = arguments?.getString("description") ?: ""
+        savedTimerId = arguments?.getInt("id") ?: 0
+        savedTimerDuration = arguments?.getInt("duration") ?: 0
     }
 
 //    fun activate() {
@@ -138,23 +150,25 @@ class SavedTimerPanel(/*val appContext: Context, val savedTimerData: SaveableTim
 //        }
 //    }
 //
-//    fun setDeleteButtonCallback(onClick: (uid: Int) -> Unit) {
-//        deleteButtonReference.setOnClickListener {
-//            onClick(savedTimerData.uid)
+    fun setDeleteButtonCallbackProperty(onClick: (uid: Int) -> Unit) {
+        deleteCallback = onClick
+//        binding.deleteButton.setOnClickListener {
+//            onClick(savedTimerId)
 //        }
-//    }
-//
-//    fun setEditButtonCallback(onClick: (uid: Int) -> Unit) {
-//        editButtonReference.setOnClickListener {
-//            onClick(savedTimerData.uid)
+    }
+
+    fun setEditButtonCallbackProperty(onClick: (uid: Int) -> Unit) {
+        editCallback = onClick
+//        binding.editButton.setOnClickListener {
+//            onClick(savedTimerId)
 //        }
-//    }
-//
-//    fun setDeactivateButtonCallback(onClick: (uid: Int) -> Unit) {
-//        deactivateButtonReference.setOnClickListener {
-//            onClick(savedTimerData.uid)
+    }
+
+    fun setDeactivateButtonCallback(onClick: (uid: Int) -> Unit) {
+//        binding..setOnClickListener {
+//            onClick(savedTimerId)
 //        }
-//    }
+    }
 
 //    init {
 //        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)

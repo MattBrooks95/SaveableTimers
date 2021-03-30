@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.LinearLayout
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
 import brooks.SaveableTimers.R
@@ -40,39 +41,21 @@ class SavedTimersScreen : AppCompatActivity() {
             val timers: List<SaveableTimer> = loadTimers()
             Log.d(className,"within the loop to make timer elements, length:" + timers.size)
 
-//            val newLayoutParams = LinearLayout.LayoutParams(
-//                LinearLayout.LayoutParams.WRAP_CONTENT,
-//                LinearLayout.LayoutParams.WRAP_CONTENT
-//            )
-
             timers.forEachIndexed {index, timer ->
-//                val savedTimerView = buildViewForSavedTimer(timer)
-//                timerViewMap.put(timer.uid, savedTimerView)
-//                if (index > 0) newLayoutParams.marginStart = 5
-//                binding.savedTimersContainer.addView(savedTimerView);
                 val bundle = Bundle()
                 bundle.putString("name", timer.displayName)
                 bundle.putString("description", timer.description)
                 bundle.putInt("id", timer.uid)
                 bundle.putInt("duration", timer.duration)
-                //TODO why can't I use this?
-//                bundleOf(
-//                    "name" to timer.displayName,
-//                    "description" to timer.description,
-//                    "id" to timer.uid,
-//                    "duration" to timer.duration
-//                )
 
-//                savedTimerName = args?.getString("name") ?: ""
-//                savedTimerDescription = args?.getString("description") ?: ""
-//                //gotta be a better way to declare these...
-//                savedTimerId = args?.getInt("id") ?: 0
-//                savedTimerDuration = args?.getInt("duration") ?: 0
                 supportFragmentManager.commit{
                     setReorderingAllowed(true)
                     //why can't I do this like the tutorial? in the tutorial the add method lets you pass the bundle
                     val newFragment = SavedTimerPanel()
+                    timerViewMap[timer.uid] = newFragment
                     newFragment.arguments = bundle
+                    newFragment.setDeleteButtonCallbackProperty(::deleteSavedTimer)
+                    newFragment.setEditButtonCallbackProperty(::editSavedTimer)
                     add(R.id.saved_timers_container, newFragment)
                 }
             }
@@ -89,11 +72,14 @@ class SavedTimersScreen : AppCompatActivity() {
         Log.d(className, "delete uuid:$uuid")
         val savedTimerPanel = timerViewMap[uuid];
         if (savedTimerPanel !== null) {
-            scope.launch {
+            supportFragmentManager.commit {
+                remove(timerViewMap[uuid] as Fragment)
+            }
+//            scope.launch {
 //                val timerDao = db.saveableTimerDao()
 //                timerDao.deleteAll(savedTimerPanel.savedTimerData);
 //                binding.savedTimersContainer.removeView(savedTimerPanel)
-            }
+//            }
         }
     }
 
