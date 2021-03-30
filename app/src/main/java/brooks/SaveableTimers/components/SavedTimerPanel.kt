@@ -32,6 +32,8 @@ class SavedTimerPanel: Fragment(R.layout.saved_timer_panel) {
     private var _binding: SavedTimerPanelBinding? = null
     private val binding get() = _binding!!
 
+    private var isActivated: Boolean = false
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -63,144 +65,48 @@ class SavedTimerPanel: Fragment(R.layout.saved_timer_panel) {
                 editCallback(savedTimerId)
             }
         }
-    }
 
-//    override fun setArguments(args: Bundle?) {
-//        super.setArguments(args)
-//        savedTimerName = args?.getString("name") ?: ""
-//        savedTimerDescription = args?.getString("description") ?: ""
-//        //gotta be a better way to declare these...
-//        savedTimerId = args?.getInt("id") ?: 0
-//        savedTimerDuration = args?.getInt("duration") ?: 0
-//
-//        populateFields()
-//    }
+        binding.toggleActiveButton.setOnClickListener{
+            if (isActivated) {
+                deactivate()
+            } else {
+                activate()
+            }
+            isActivated = !isActivated
+        }
+    }
 
     private fun populateFields() {
         savedTimerName = arguments?.getString("name") ?: ""
         savedTimerDescription = arguments?.getString("description") ?: ""
         savedTimerId = arguments?.getInt("id") ?: 0
         savedTimerDuration = arguments?.getInt("duration") ?: 0
+
+        binding.nameField.text = savedTimerName
+        binding.descriptionField.text = savedTimerDescription
+        binding.durationField.text = savedTimerDuration.toString()
     }
 
-//    fun activate() {
-//        deleteButtonReference.isEnabled = false
-//        editButtonReference.isEnabled = false
-//        this.removeView(activateButtonReference)
-//        this.addView(deactivateButtonReference, 0)
-//    }
+    fun activate() {
+        binding.editButton.isEnabled = false
+        binding.deleteButton.isEnabled = false
+        binding.toggleActiveButton.text = "D"
+    }
 
-//    fun deactivate() {
-//        deleteButtonReference.isEnabled = true
-//        editButtonReference.isEnabled = true
-//        this.removeView(deactivateButtonReference)
-//        this.addView(activateButtonReference, 0)
-//    }
+    fun deactivate() {
+        binding.editButton.isEnabled = true
+        binding.deleteButton.isEnabled = true
+        binding.toggleActiveButton.text = "A"
+    }
 
-//    private fun makeDisplayNameElement(displayName: String?): View {
-//        val newTextView = TextView(appContext)
-//        newTextView.text = if (!displayName.isNullOrEmpty()) displayName else ""
-//        return newTextView
-//    }
-//
-//    private fun makeDurationElement(duration: Int): View {
-//        val durationDisplayView = TextView(appContext)
-//        durationDisplayView.text = duration.toString()
-//        return durationDisplayView
-//    }
-//
-//    private fun makeDescriptionElement(description: String?): View {
-//        return makeDisplayNameElement(description)
-//    }
-//
-//    private fun makeDeleteButton(savedTimerId: Int): MaterialButton {
-//        return makeButton("D")
-//    }
-//
-//    private fun makeEditButton(savedTimerId: Int): MaterialButton {
-//        return makeButton("E")
-//    }
-//
-//    private fun makeButtonWithBackgroundColor(text: String, backgroundColor: Int): MaterialButton {
-//        val newButton = makeButton(text)
-//        newButton.setBackgroundColor(backgroundColor)
-//        return newButton
-//    }
-//
-//    private fun makeButton(text: String): MaterialButton {
-//        val newButton = MaterialButton(appContext)
-//        newButton.text = text
-//        return newButton
-//    }
 
-//    private fun makeActivateButton(): MaterialButton {
-//        val activateButton = MaterialButton(appContext);
-//        activateButton.text = "A"
-//        return activateButton
-//        return makeButton("A")
-//    }
-
-//    private fun makeDeactivateButton(text: String, backgroundColor: Int): MaterialButton {
-//        return makeButtonWithBackgroundColor(text, backgroundColor)
-//    }
-//
-//    fun setActivateButtonCallback(onClick: (uid: Int) -> Unit) {
-//        activateButtonReference.setOnClickListener {
-//            onClick(savedTimerData.uid)
-//        }
-//    }
 //
     fun setDeleteButtonCallbackProperty(onClick: (uid: Int) -> Unit) {
         deleteCallback = onClick
-//        binding.deleteButton.setOnClickListener {
-//            onClick(savedTimerId)
-//        }
     }
 
     fun setEditButtonCallbackProperty(onClick: (uid: Int) -> Unit) {
         editCallback = onClick
-//        binding.editButton.setOnClickListener {
-//            onClick(savedTimerId)
-//        }
     }
 
-    fun setDeactivateButtonCallback(onClick: (uid: Int) -> Unit) {
-//        binding..setOnClickListener {
-//            onClick(savedTimerId)
-//        }
-    }
-
-//    init {
-//        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE)
-//        val contentsView = inflater.inflate(R.layout.saved_timer_panel)
-//        LayoutInflater.from(appContext).inflate(R.layout.saved_timer_panel, this)
-//        val displayName = makeDisplayNameElement(savedTimerData.displayName)
-//        val duration = makeDurationElement(savedTimerData.duration)
-//        val description = makeDescriptionElement(savedTimerData.description)
-//
-//        val deleteButton = makeDeleteButton(savedTimerData.uid)
-//        deleteButtonReference = deleteButton
-//
-//        val editButton = makeEditButton(savedTimerData.uid)
-//        editButtonReference = editButton
-//
-//        val activateButton = makeActivateButton()
-//        activateButtonReference = activateButton
-//
-//        val deactivateButton = makeDeactivateButton("D", ContextCompat.getColor(appContext, R.color.stop))
-//        deactivateButtonReference = deactivateButton
-//
-//        this.tag = savedTimerData
-//
-//        listOf(
-//            activateButton,
-//            displayName,
-//            duration,
-//            description,
-//            editButton,
-//            deleteButton
-//        ).forEach {
-//            this.addView(it)
-//        }
-//    }
 }
