@@ -56,6 +56,8 @@ class SavedTimersScreen : AppCompatActivity() {
                     newFragment.arguments = bundle
                     newFragment.setDeleteButtonCallbackProperty(::deleteSavedTimer)
                     newFragment.setEditButtonCallbackProperty(::editSavedTimer)
+                    newFragment.setActivateButtonCallback(::activateTimer)
+                    newFragment.setDeactivateButtonCallback(::deactivateTimer)
                     add(R.id.saved_timers_container, newFragment)
                 }
             }
@@ -88,7 +90,7 @@ class SavedTimersScreen : AppCompatActivity() {
         Log.d(className, "activate timer:$uuid")
         val savedTimerPanel = timerViewMap[uuid]
         if (savedTimerPanel !== null) {
-//            savedTimerPanel.activate()
+            Log.d(className, "activate timer with id $uuid")
         }
     }
 
@@ -96,7 +98,7 @@ class SavedTimersScreen : AppCompatActivity() {
         Log.d(className, "deactivate timer:$uuid")
         val savedTimerPanel = timerViewMap[uuid]
         if (savedTimerPanel !== null) {
-//            savedTimerPanel.deactivate()
+            Log.d(className, "deactivate timer with id $uuid")
         }
     }
 

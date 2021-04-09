@@ -27,6 +27,8 @@ class SavedTimerPanel: Fragment(R.layout.saved_timer_panel) {
 
     private lateinit var deleteCallback: (savedTimerId: Int) -> Unit?
     private lateinit var editCallback: (savedTimerId: Int) -> Unit?
+    private lateinit var activateCallback: (savedTimerId: Int) -> Unit?
+    private lateinit var deactivateCallback: (savedTimerId: Int) -> Unit?
 
     //only valid in between onCreateView and onDestroyView
     private var _binding: SavedTimerPanelBinding? = null
@@ -91,12 +93,18 @@ class SavedTimerPanel: Fragment(R.layout.saved_timer_panel) {
         binding.editButton.isEnabled = false
         binding.deleteButton.isEnabled = false
         binding.toggleActiveButton.text = "D"
+        if (::activateCallback.isInitialized) {
+            activateCallback(savedTimerId)
+        }
     }
 
     fun deactivate() {
         binding.editButton.isEnabled = true
         binding.deleteButton.isEnabled = true
         binding.toggleActiveButton.text = "A"
+        if (::deactivateCallback.isInitialized) {
+            deactivateCallback(savedTimerId)
+        }
     }
 
 
@@ -109,4 +117,11 @@ class SavedTimerPanel: Fragment(R.layout.saved_timer_panel) {
         editCallback = onClick
     }
 
+    fun setActivateButtonCallback(onClick: (uid: Int) -> Unit) {
+        activateCallback = onClick
+    }
+
+    fun setDeactivateButtonCallback(onClick: (uid: Int) -> Unit) {
+        deactivateCallback = onClick
+    }
 }
