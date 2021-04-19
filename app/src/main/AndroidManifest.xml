@@ -18,6 +18,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".views.RingingScreen" />
+        <receiver android:name=".androidWrappers.SavedTimerReceiver" android:exported="true">
+            <intent-filter>
+                <action android:name="androidWrappers.SavedTimerReceiver"></action>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
