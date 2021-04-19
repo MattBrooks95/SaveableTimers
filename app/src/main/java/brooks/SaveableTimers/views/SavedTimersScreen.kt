@@ -1,5 +1,7 @@
 package brooks.SaveableTimers.views
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Intent
 
 import androidx.appcompat.app.AppCompatActivity
@@ -10,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
 import brooks.SaveableTimers.R
+import brooks.SaveableTimers.androidWrappers.AlarmWrapper
 import brooks.SaveableTimers.components.SavedTimerPanel
 import brooks.SaveableTimers.data.AppDatabase
 import brooks.SaveableTimers.data.SaveableTimer
@@ -25,6 +28,7 @@ class SavedTimersScreen : AppCompatActivity() {
     lateinit var db: AppDatabase
     private val className: String = "SavedTimersScreen"
     private var timerViewMap: MutableMap<Int, SavedTimerPanel> = mutableMapOf()
+    private var timerDataMap: MutableMap<Int, SaveableTimer> = mutableMapOf()
     val scope = MainScope()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +44,9 @@ class SavedTimersScreen : AppCompatActivity() {
         scope.launch{
             val timers: List<SaveableTimer> = loadTimers()
             Log.d(className,"within the loop to make timer elements, length:" + timers.size)
+            timers.forEach {
+                timerDataMap[it.uid] = it
+            }
 
             supportFragmentManager.commit{
                 timers.forEachIndexed { index, timer ->
@@ -88,9 +95,22 @@ class SavedTimersScreen : AppCompatActivity() {
 
     private fun activateTimer(uuid: Int) {
         Log.d(className, "activate timer:$uuid")
-        val savedTimerPanel = timerViewMap[uuid]
-        if (savedTimerPanel !== null) {
+        val savedTimerData = timerDataMap[uuid]
+        if (savedTimerData !== null) {
             Log.d(className, "activate timer with id $uuid")
+            val duration = savedTimerData.duration
+            val alarmManager = AlarmWrapper.getInstance(this)
+
+            val intent = Intent(this, SavedTimerReceiver::class.java).let { intent ->
+                PendingIntent.getBroadcast(this, 0, intent, 0)
+            }
+
+            //mins * 60 = seconds, seconds * 1000 = duration in millis
+            alarmManager.set(
+                    AlarmManager.RTC_WAKEUP,
+                    System.currentTimeMillis() + duration * 60 * 1000,
+                    intent
+            )
         }
     }
 
