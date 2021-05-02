@@ -17,6 +17,13 @@ class RingingScreen : AppCompatActivity() {
         setContentView(binding.root)
         db = AppDatabase.getInstance(this)
         Log.d(className, "view in response to alarm")
+        db = AppDatabase.getInstance(this)
+
+        populateTextFields()
     }
 
+    private fun populateTextFields(){
+        val savedTimer = db.saveableTimerDao().getSaveableTimerById()
+        binding.alarmDescription.text =
+    }
 }
