@@ -23,8 +23,8 @@ class RingingScreen : AppCompatActivity() {
         Log.d(className, "view in response to alarm")
         db = AppDatabase.getInstance(this)
 
-        val savedTimerId: Int? = savedInstanceState?.getInt("saved_timer_id")
-        if (savedTimerId == null) {
+        val savedTimerId: Int = intent.getIntExtra("saved_timer_id", -1)
+        if (savedTimerId == -1) {
             Log.d(className, "saved timer id from bundle wasn't found")
             return
         }

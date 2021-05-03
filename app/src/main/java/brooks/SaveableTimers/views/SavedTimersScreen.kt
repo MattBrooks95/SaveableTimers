@@ -101,10 +101,10 @@ class SavedTimersScreen : AppCompatActivity() {
             val alarmManager = AlarmWrapper.getInstance(this)
 
             val intent = Intent(this, SavedTimerReceiver::class.java)
-            intent.putExtra("saved_timer_id", uuid)
+            intent.putExtra(RINGER_INTENT_TIMER_ID, uuid)
 
             val pendingIntent = intent.let { intent ->
-                PendingIntent.getBroadcast(this, 0, intent, 0)
+                PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
             }
 
             //mins * 60 = seconds, seconds * 1000 = duration in millis
@@ -144,5 +144,9 @@ class SavedTimersScreen : AppCompatActivity() {
 
     private suspend fun loadTimers(): List<SaveableTimer> {
         return db.saveableTimerDao().getAll()
+    }
+
+    companion object{
+        const val RINGER_INTENT_TIMER_ID = "saved_timer_id"
     }
 }
