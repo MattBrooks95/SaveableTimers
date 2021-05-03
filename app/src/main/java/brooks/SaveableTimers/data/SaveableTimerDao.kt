@@ -11,7 +11,7 @@ interface SaveableTimerDao {
     suspend fun getAll(): List<SaveableTimer>
 
     @Query("SELECT * from saveableTimer WHERE uid= :uid")
-    suspend fun getSaveableTimerById(uid: Integer)
+    suspend fun getSaveableTimerById(uid: Int): SaveableTimer
 
     @Insert
     suspend fun insertAll(vararg saveableTimers: SaveableTimer)

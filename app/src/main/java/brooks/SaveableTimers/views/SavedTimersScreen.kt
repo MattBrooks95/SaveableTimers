@@ -100,7 +100,10 @@ class SavedTimersScreen : AppCompatActivity() {
             val duration = savedTimerData.duration
             val alarmManager = AlarmWrapper.getInstance(this)
 
-            val intent = Intent(this, SavedTimerReceiver::class.java).let { intent ->
+            val intent = Intent(this, SavedTimerReceiver::class.java)
+            intent.putExtra("saved_timer_id", uuid)
+
+            val pendingIntent = intent.let { intent ->
                 PendingIntent.getBroadcast(this, 0, intent, 0)
             }
 
@@ -108,7 +111,7 @@ class SavedTimersScreen : AppCompatActivity() {
             alarmManager.set(
                     AlarmManager.RTC_WAKEUP,
                     System.currentTimeMillis() + duration * 60 * 1000,
-                    intent
+                    pendingIntent
             )
         }
     }
