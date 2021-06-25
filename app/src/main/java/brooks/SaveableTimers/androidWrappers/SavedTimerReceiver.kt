@@ -15,7 +15,7 @@ class SavedTimerReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         Log.d(className, "the alarm was fired!")
         val savedTimerId: Int = intent.getIntExtra(SavedTimersScreen.RINGER_INTENT_TIMER_ID, -1)
-        if (savedTimerId === -1) {
+        if (savedTimerId == -1) {
             Log.e(className, "Saved timer id wasn't found in intent received by $className")
         }
         val launchViewIntent: Intent = Intent(context, RingingScreen::class.java)

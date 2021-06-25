@@ -52,6 +52,10 @@ class CreateTimerScreen : AppCompatActivity() {
             val intent = Intent(this, ActiveTimersScreen::class.java)
             startActivity(intent)
         }
+
+        binding.selectSoundFileButton.setOnClickListener {
+            Log.d("CreateTimerScreen", "TODO")
+        }
     }
 
     private fun createDurationButtons() {

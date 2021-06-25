@@ -56,13 +56,13 @@ class SavedTimerPanel: Fragment(R.layout.saved_timer_panel) {
     }
 
     private fun setHandlers() {
-        if (deleteCallback !== null) {
+        if (deleteCallback != null) {
             binding.deleteButton.setOnClickListener {
                 deleteCallback(savedTimerId)
             }
         }
 
-        if (editCallback !== null) {
+        if (editCallback != null) {
             binding.editButton.setOnClickListener {
                 editCallback(savedTimerId)
             }

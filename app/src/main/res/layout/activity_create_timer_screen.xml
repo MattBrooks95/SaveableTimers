@@ -50,6 +50,11 @@
                     android:inputType="numberDecimal"
                     android:hint="@string/timer_duration_entry_hint" />
             </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/pick_file_for_timer"
+                android:id="@+id/select_sound_file_button"></com.google.android.material.button.MaterialButton>
             <LinearLayout
                 android:id="@+id/timer_duration_buttons_container"
                 android:orientation="horizontal"
