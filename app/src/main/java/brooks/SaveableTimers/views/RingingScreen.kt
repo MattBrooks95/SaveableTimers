@@ -65,6 +65,7 @@ class RingingScreen : AppCompatActivity() {
             soundFilePathToUse = "TODO_DEFAULT_FILE_PATH"
         }
         try {
+            mediaPlayer?.isLooping = true
             mediaPlayer?.apply {
                 setAudioAttributes(
                         AudioAttributes.Builder()
