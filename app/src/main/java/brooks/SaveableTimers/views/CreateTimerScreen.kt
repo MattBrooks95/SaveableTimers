@@ -1,14 +1,16 @@
 package brooks.SaveableTimers.views
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent.ACTION_GET_CONTENT
+import android.content.Intent.CATEGORY_OPENABLE
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import brooks.SaveableTimers.data.AppDatabase
 import brooks.SaveableTimers.data.SaveableTimer
 import brooks.SaveableTimers.databinding.ActivityCreateTimerScreenBinding
@@ -16,6 +18,10 @@ import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.InputStream
 
 private lateinit var binding: ActivityCreateTimerScreenBinding
 
@@ -23,6 +29,10 @@ class CreateTimerScreen : AppCompatActivity() {
     private var scope: CoroutineScope = MainScope()
     private val className: String = "CreateTimerScreen"
     lateinit var db: AppDatabase
+    private val FILE_PICK_REQUEST_CODE = 1
+
+    private var newSoundFilePath: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCreateTimerScreenBinding.inflate(layoutInflater)
@@ -44,7 +54,7 @@ class CreateTimerScreen : AppCompatActivity() {
             val timerDao = db.saveableTimerDao()
             //the ID is auto generated, but when you make an instance of the DAO you have to specify a value, so setting the int to 0
             //is necessary. I had it set to 1, and it would crash because it would use 1 on the insert, and violate primary key uniqueness
-            var newSaveableTimer = SaveableTimer(0, binding.timerNameField.text.toString(), getDurationFloatFromEditableText(durationTextInput), binding.timerDescriptionField.text.toString())
+            var newSaveableTimer = SaveableTimer(0, binding.timerNameField.text.toString(), getDurationFloatFromEditableText(durationTextInput), binding.timerDescriptionField.text.toString(), newSoundFilePath)
             scope.launch {
                 timerDao.insertAll(newSaveableTimer)
             }
@@ -54,9 +64,47 @@ class CreateTimerScreen : AppCompatActivity() {
         }
 
         binding.selectSoundFileButton.setOnClickListener {
-            Log.d("CreateTimerScreen", "TODO")
+            Log.d(className, "TODO")
+            val filePickIntent = Intent(ACTION_GET_CONTENT)
+            filePickIntent.addCategory(CATEGORY_OPENABLE)
+            resultLauncher.launch("audio/*")
+        }
+
+        binding.useDefaultSoundFileButton.setOnClickListener {
+            Log.d(className, "TODO")
+        }
+
+        binding.selectPreviousSoundFile.setOnClickListener {
+            Log.d(className, "TODO")
         }
     }
+
+    var resultLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        Log.d(className, "uri:" + uri?.toString())
+        Log.d(className, "uri as path:" + uri?.path)
+        if (uri != null) {
+            val appDirectory = filesDir
+            val selectedFileInputStream = contentResolver.openInputStream(uri)
+            if (selectedFileInputStream != null) {
+//            val inputStream: InputStream = FileInputStream(selectedFile)
+                val outputFilePath = appDirectory.path + "/" + System.currentTimeMillis()
+                val outputFile = File(outputFilePath)
+                selectedFileInputStream.copyTo(FileOutputStream(outputFile))
+                newSoundFilePath = outputFilePath
+                Log.d(className, "set sound file path attribute:" + newSoundFilePath)
+//            val outputStream = FileOutputStream(outputFile)
+//            val buffer: ByteArray = ByteArray(2048)
+//            while((readAmount = inputStream.read(buffer)) {
+//
+//            }
+            } else {
+                Log.e(className, "TODO FILE OPERATIONS FAILED, USE DEFAULT")
+            }
+        }
+    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//    }
 
     private fun createDurationButtons() {
         val buttonContainer = binding.timerDurationButtonsContainer

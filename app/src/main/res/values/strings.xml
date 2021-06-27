@@ -9,5 +9,7 @@
     <string name="timer_name_hint">Timer Description</string>
     <string name="timer_duration_entry_hint">Timer Duration</string>
     <string name="dismiss_button">Dismiss</string>
-    <string name="pick_file_for_timer">Select Sound File</string>
+    <string name="pick_file_for_timer">Select New Sound File</string>
+    <string name="use_default_file_for_timer">Use Default Sound File</string>
+    <string name="reuse_previous_sound_file">Select Previous Sound File</string>
 </resources>

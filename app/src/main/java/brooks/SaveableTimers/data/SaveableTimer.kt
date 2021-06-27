@@ -11,5 +11,6 @@ data class SaveableTimer(
 //    @ColumnInfo(name = "tag_id") val tagId: Int?,//key into tags table, for search feature
     @ColumnInfo(name = "display_name") val displayName: String?,
     @ColumnInfo(name = "duration") val duration: Int,
-    @ColumnInfo(name = "description")  val description: String?
+    @ColumnInfo(name = "description")  val description: String?,
+    @ColumnInfo(name = "sound_file_path") val soundFilePath: String?
 )

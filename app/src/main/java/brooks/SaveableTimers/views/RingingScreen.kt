@@ -2,6 +2,7 @@ package brooks.SaveableTimers.views
 
 import android.media.AudioAttributes
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -27,7 +28,6 @@ class RingingScreen : AppCompatActivity() {
         setContentView(binding.root)
         db = AppDatabase.getInstance(this)
         Log.d(className, "view in response to alarm")
-        db = AppDatabase.getInstance(this)
 
         val savedTimerId: Int = intent.getIntExtra("saved_timer_id", -1)
         if (savedTimerId == -1) {
@@ -39,10 +39,10 @@ class RingingScreen : AppCompatActivity() {
             val savedTimer: SaveableTimer = getSavedTimerFromDb(savedTimerId)
 
             populateTextFields(savedTimer)
+            ring(savedTimer.soundFilePath);
         }
 
         setHandlers();
-        ring();
     }
 
     private fun setHandlers(){
@@ -57,7 +57,13 @@ class RingingScreen : AppCompatActivity() {
         finish();
     }
 
-    private fun ring() {
+    private fun ring(soundFilePath: String?) {
+        var soundFilePathToUse: String? = null;
+        if (soundFilePath != null) {
+            soundFilePathToUse = soundFilePath
+        } else {
+            soundFilePathToUse = "TODO_DEFAULT_FILE_PATH"
+        }
         try {
             mediaPlayer?.apply {
                 setAudioAttributes(
@@ -66,7 +72,7 @@ class RingingScreen : AppCompatActivity() {
                                 .setUsage(AudioAttributes.USAGE_ALARM)
                                 .build()
                 )
-                setDataSource(applicationContext, File("Phone/Music/zoinks.mp3").toUri())
+                setDataSource(applicationContext, Uri.fromFile(File(soundFilePathToUse)))
                 prepare()
                 start()
             }
@@ -78,6 +84,7 @@ class RingingScreen : AppCompatActivity() {
     private fun populateTextFields(saveableTimer: SaveableTimer){
         binding.alarmDescription.text = saveableTimer.description
         binding.alarmName.text = saveableTimer.displayName
+        Log.d(className, "sound file path?:" + saveableTimer.soundFilePath)
     }
 
     private suspend fun getSavedTimerFromDb(uuid: Int): SaveableTimer {
