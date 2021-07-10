@@ -121,6 +121,13 @@ class SavedTimersScreen : AppCompatActivity() {
         val savedTimerPanel = timerViewMap[uuid]
         if (savedTimerPanel !== null) {
             Log.d(className, "deactivate timer with id $uuid")
+            val intent = Intent(this, SavedTimerReceiver::class.java)
+            intent.putExtra(RINGER_INTENT_TIMER_ID, uuid)
+
+            val pendingIntent = intent.let { intent ->
+                PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            }
+            AlarmWrapper.getInstance(this).cancel(pendingIntent)
         }
     }
 
