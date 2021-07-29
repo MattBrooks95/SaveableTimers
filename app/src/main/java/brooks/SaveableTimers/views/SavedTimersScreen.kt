@@ -13,6 +13,7 @@ import brooks.SaveableTimers.R
 import brooks.SaveableTimers.androidWrappers.AlarmWrapper
 import brooks.SaveableTimers.androidWrappers.SavedTimerReceiver
 import brooks.SaveableTimers.components.SavedTimerPanel
+import brooks.SaveableTimers.data.ActiveTimer
 import brooks.SaveableTimers.data.AppDatabase
 import brooks.SaveableTimers.data.SaveableTimer
 
@@ -110,9 +111,14 @@ class SavedTimersScreen : AppCompatActivity() {
             //mins * 60 = seconds, seconds * 1000 = duration in millis
             alarmManager.set(
                     AlarmManager.RTC_WAKEUP,
-                    System.currentTimeMillis() + duration * 60 * 1000,
+                    System.currentTimeMillis() + duration * 60000,//60 secs/min * 1000 msecs/sec
                     pendingIntent
             )
+
+            val activeTimer = ActiveTimer(0, uuid, true)
+            scope.launch {
+                db.activeTimerDao().insertAll(activeTimer)
+            }
         }
     }
 

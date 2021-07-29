@@ -7,15 +7,15 @@ import androidx.room.Query
 
 @Dao
 interface SaveableTimerDao {
-    @Query("SELECT * FROM saveabletimer")
+    @Query("SELECT * FROM SaveableTimer")
     suspend fun getAll(): List<SaveableTimer>
 
-    @Query("SELECT * from saveableTimer WHERE uid= :uid")
+    @Query("SELECT * from SaveableTimer WHERE uid= :uid")
     suspend fun getSaveableTimerById(uid: Int): SaveableTimer
 
     @Insert
-    suspend fun insertAll(vararg saveableTimers: SaveableTimer)
+    suspend fun insertAll(vararg SaveableTimers: SaveableTimer)
 
     @Delete
-    suspend fun deleteAll(vararg saveableTimers: SaveableTimer)
+    suspend fun deleteAll(vararg SaveableTimers: SaveableTimer)
 }
