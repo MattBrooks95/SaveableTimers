@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import brooks.SaveableTimers.data.ActiveTimer
 import brooks.SaveableTimers.data.AppDatabase
 import brooks.SaveableTimers.data.SaveableTimer
 import brooks.SaveableTimers.databinding.RingingViewBinding
@@ -42,6 +43,14 @@ class RingingScreen : AppCompatActivity() {
             ring(savedTimer.soundFilePath);
         }
 
+        scope.launch {
+            val timersToTurnOff: List<ActiveTimer> = db.activeTimerDao().getActiveActiveTimerEntriesWithUid(savedTimerId)
+            val idsToTurnOff: MutableList<Int> = mutableListOf()
+            timersToTurnOff.forEach {
+                idsToTurnOff.add(it.uid)
+            }
+            //use DAO and list of IDS to do an UPDATE where you change currently active
+        }
         setHandlers();
     }
 
