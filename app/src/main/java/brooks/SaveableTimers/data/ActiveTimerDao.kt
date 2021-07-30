@@ -3,10 +3,11 @@ package brooks.SaveableTimers.data
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 
 @Dao
 interface ActiveTimerDao {
-    @Query("SELECT * from SaveableTimer st INNER JOIN ActiveTimer at WHERE at.currently_active=1 AND at.uid=st.uid")
+    @Query("SELECT * FROM SaveableTimer st INNER JOIN ActiveTimer at WHERE at.currently_active=1 AND at.uid=st.uid")
     suspend fun getAllActiveTimers(): List<SaveableTimer>;
     @Query("SELECT * FROM ActiveTimer at WHERE at.currently_active=1 AND at.uid= :uid")
     suspend fun getActiveActiveTimerEntriesWithUid(uid: Int): List<ActiveTimer>
@@ -14,5 +15,4 @@ interface ActiveTimerDao {
     suspend fun getAllActiveTimerEntries(): List<ActiveTimer>;
     @Insert
     suspend fun insertAll(vararg ActiveTimers: ActiveTimer)
-
 }
