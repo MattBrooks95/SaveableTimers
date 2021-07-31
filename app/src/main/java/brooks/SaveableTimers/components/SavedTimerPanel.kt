@@ -1,21 +1,11 @@
 package brooks.SaveableTimers.components
 
-import android.content.Context
-import android.graphics.Color
 import android.os.Bundle
-import android.renderscript.ScriptGroup
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import brooks.SaveableTimers.R
-import brooks.SaveableTimers.data.SaveableTimer
-import brooks.SaveableTimers.databinding.ActivitySavedTimersScreenBinding
-import com.google.android.material.button.MaterialButton
 import brooks.SaveableTimers.databinding.SavedTimerPanelBinding
 
 
@@ -92,7 +82,7 @@ class SavedTimerPanel: Fragment(R.layout.saved_timer_panel) {
     fun activate() {
         binding.editButton.isEnabled = false
         binding.deleteButton.isEnabled = false
-        binding.toggleActiveButton.text = "D"
+        binding.toggleActiveButton.text = getString(R.string.deactivate)
         if (::activateCallback.isInitialized) {
             activateCallback(savedTimerId)
         }

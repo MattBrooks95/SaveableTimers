@@ -12,4 +12,6 @@
     <string name="pick_file_for_timer">Select New Sound File</string>
     <string name="use_default_file_for_timer">Use Default Sound File</string>
     <string name="reuse_previous_sound_file">Select Previous Sound File</string>
+    <string name="ring_time">Ring Time</string>
+    <string name="deactivate">D</string>
 </resources>

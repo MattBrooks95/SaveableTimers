@@ -102,6 +102,7 @@ class SavedTimersScreen : AppCompatActivity() {
             val duration = savedTimerData.duration
             val alarmManager = AlarmWrapper.getInstance(this)
 
+            //TODO move this into an intent factory
             val intent = Intent(this, SavedTimerReceiver::class.java)
             intent.putExtra(RINGER_INTENT_TIMER_ID, uuid)
 
@@ -127,16 +128,6 @@ class SavedTimersScreen : AppCompatActivity() {
         Log.d(className, "deactivate timer:$uid")
         TimerOperations().deactivateTimer(this, db, uid);
     }
-
-//    private fun buildViewForSavedTimer(savedTimer: SaveableTimer): SavedTimerPanel {
-//        val savedTimerPanel = SavedTimerPanel(this, savedTimer)
-        //this double colon syntax was necessary to pass the method as a parameter
-//        savedTimerPanel.setEditButtonCallback(::editSavedTimer)
-//        savedTimerPanel.setDeleteButtonCallback(::deleteSavedTimer)
-//        savedTimerPanel.setActivateButtonCallback(::activateTimer)
-//        savedTimerPanel.setDeactivateButtonCallback(::deactivateTimer)
-//        return savedTimerPanel
-//    }
 
     private fun setHandlers() {
         val goToActiveTimersScreenButton = binding.navigateActiveTimersButton
