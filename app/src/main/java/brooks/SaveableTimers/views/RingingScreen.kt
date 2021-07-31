@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import brooks.SaveableTimers.Operations.TimerOperations
 import brooks.SaveableTimers.data.ActiveTimer
 import brooks.SaveableTimers.data.AppDatabase
 import brooks.SaveableTimers.data.SaveableTimer
@@ -43,32 +44,7 @@ class RingingScreen : AppCompatActivity() {
             populateTextFields(savedTimer)
             ring(savedTimer.soundFilePath);
         }
-
-        scope.launch {
-/*
-            val timersToTurnOff: List<ActiveTimer> = db.activeTimerDao().getActiveActiveTimerEntriesWithUid(savedTimerId)
-            val idsToTurnOff: MutableList<Int> = mutableListOf()
-            timersToTurnOff.forEach {
-                idsToTurnOff.add(it.uid)
-            }
-*/
-            //use DAO and list of IDS to do an UPDATE where you change currently active
-            val timersToTurnOff: List<ActiveTimer> = db.activeTimerDao().getActiveActiveTimerEntriesForSavedTimerId(savedTimerId)
-            val mutableTimersToTurnOff = timersToTurnOff.toMutableList()
-            mutableTimersToTurnOff.forEach {
-                it.currentlyActive = false
-            }
-/*
-            //I was wondering why I couldn't modify the elements in the list, I thought it was because of the list or operator's mutability,
-            //but the problem was that the ActiveTimer class's field was val and not var
-            val mutableTimersToTurnOffIterator = mutableTimersToTurnOff.iterator()
-            while(mutableTimersToTurnOffIterator.hasNext()) {
-                mutableTimersToTurnOffIterator.next().currentlyActive = false
-            }
-*/
-            db.activeTimerDao().updateActiveTimerEntries(mutableTimersToTurnOff)
-
-        }
+        TimerOperations().deactivateTimer(this, db, savedTimerId)
         setHandlers();
     }
 

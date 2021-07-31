@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import brooks.SaveableTimers.Operations.TimerOperations
 import brooks.SaveableTimers.R
 import brooks.SaveableTimers.androidWrappers.AlarmWrapper
 import brooks.SaveableTimers.androidWrappers.SavedTimerReceiver
@@ -122,19 +123,9 @@ class SavedTimersScreen : AppCompatActivity() {
         }
     }
 
-    private fun deactivateTimer(uuid: Int) {
-        Log.d(className, "deactivate timer:$uuid")
-        val savedTimerPanel = timerViewMap[uuid]
-        if (savedTimerPanel !== null) {
-            Log.d(className, "deactivate timer with id $uuid")
-            val intent = Intent(this, SavedTimerReceiver::class.java)
-            intent.putExtra(RINGER_INTENT_TIMER_ID, uuid)
-
-            val pendingIntent = intent.let { intent ->
-                PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-            }
-            AlarmWrapper.getInstance(this).cancel(pendingIntent)
-        }
+    private fun deactivateTimer(uid: Int) {
+        Log.d(className, "deactivate timer:$uid")
+        TimerOperations().deactivateTimer(this, db, uid);
     }
 
 //    private fun buildViewForSavedTimer(savedTimer: SaveableTimer): SavedTimerPanel {
