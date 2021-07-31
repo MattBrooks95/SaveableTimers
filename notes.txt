@@ -7,3 +7,5 @@ also, files that are saved to the app directory should then be selectable again 
 when the alarm rings, it doesn't show up above the lock screen (the screen just stays black)
 
 the timing may be off by about a minute somehow...
+
+you need to add start times and ringing times columns to the active timers table

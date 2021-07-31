@@ -6,8 +6,6 @@ import android.util.Log
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.marginBottom
-import brooks.SaveableTimers.R
 import brooks.SaveableTimers.data.AppDatabase
 import brooks.SaveableTimers.data.SaveableTimer
 import brooks.SaveableTimers.databinding.ActiveTimersScreenBinding
@@ -37,7 +35,7 @@ class ActiveTimersScreen: AppCompatActivity() {
         val appContext = this
 
         scope.launch {
-            val timers: List<SaveableTimer> = db.activeTimerDao().getAllActiveTimers()
+            val timers: List<SaveableTimer> = db.activeTimerDao().getAllActiveSaveableTimers()
             timers.forEachIndexed { index, timer ->
                 val activeTimer = TextView(appContext)
                 activeTimer.text = "Timer #:$index timer name:${timer.displayName}"

@@ -9,5 +9,5 @@ import androidx.room.PrimaryKey
 data class ActiveTimer (
     @PrimaryKey(autoGenerate = true) val activeTimerRecordId: Int,
     @ColumnInfo(name="uid") val uid: Int,
-    @ColumnInfo(name="currently_active") val currentlyActive: Boolean
+    @ColumnInfo(name="currently_active") var currentlyActive: Boolean
 )
