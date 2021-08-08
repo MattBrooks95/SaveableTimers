@@ -4,6 +4,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import brooks.SaveableTimers.Intents.IntentFactory
 import brooks.SaveableTimers.androidWrappers.AlarmWrapper
 import brooks.SaveableTimers.androidWrappers.SavedTimerReceiver
 import brooks.SaveableTimers.data.ActiveTimer
@@ -14,7 +15,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 class TimerOperations {
-    final val className: String = "TimerOperations"
+    val className: String = "TimerOperations"
     private val scope: CoroutineScope = MainScope()
 
     fun deactivateTimer(context: Context, db: AppDatabase, timerId: Int) {
@@ -25,8 +26,7 @@ class TimerOperations {
 
     private fun killTimerIntent(context: Context, timerId: Int) {
         Log.d(className, "kill timer intent with id $timerId")
-        val intent = Intent(context, SavedTimerReceiver::class.java)
-        intent.putExtra(SavedTimersScreen.RINGER_INTENT_TIMER_ID, timerId)
+        val intent = IntentFactory().createActiveTimerIntent(context, SavedTimerReceiver::class, timerId)
 
         val pendingIntent = intent.let { intent ->
             PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)

@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import brooks.SaveableTimers.Intents.IntentFactory
 import brooks.SaveableTimers.Operations.TimerOperations
 import brooks.SaveableTimers.R
 import brooks.SaveableTimers.androidWrappers.AlarmWrapper
@@ -94,17 +95,15 @@ class SavedTimersScreen : AppCompatActivity() {
         }
     }
 
-    private fun activateTimer(uuid: Int) {
-        Log.d(className, "activate timer:$uuid")
-        val savedTimerData = timerDataMap[uuid]
+    private fun activateTimer(savedTimerId: Int) {
+        Log.d(className, "activate timer:$savedTimerId")
+        val savedTimerData = timerDataMap[savedTimerId]
         if (savedTimerData !== null) {
-            Log.d(className, "activate timer with id $uuid")
+            Log.d(className, "activate timer with id $savedTimerId")
             val duration = savedTimerData.duration
             val alarmManager = AlarmWrapper.getInstance(this)
 
-            //TODO move this into an intent factory
-            val intent = Intent(this, SavedTimerReceiver::class.java)
-            intent.putExtra(RINGER_INTENT_TIMER_ID, uuid)
+            val intent = IntentFactory().createActiveTimerIntent(this, SavedTimerReceiver::class, savedTimerId)
 
             val pendingIntent = intent.let { intent ->
                 PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
@@ -117,7 +116,7 @@ class SavedTimersScreen : AppCompatActivity() {
                     pendingIntent
             )
 
-            val activeTimer = ActiveTimer(0, uuid, true)
+            val activeTimer = ActiveTimer(0, savedTimerId, true)
             scope.launch {
                 db.activeTimerDao().insertAll(activeTimer)
             }
