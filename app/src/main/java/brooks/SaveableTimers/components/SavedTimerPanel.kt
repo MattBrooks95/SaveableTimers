@@ -58,15 +58,20 @@ class SavedTimerPanel: Fragment(R.layout.saved_timer_panel) {
             }
         }
 
-        binding.toggleActiveButton.setOnClickListener{
+        updateToggleActiveButtonCallback()
+        isActivated = !isActivated
+    }
+
+    private fun updateToggleActiveButtonCallback() {
+        binding.toggleActiveButton.setOnClickListener {
             if (isActivated) {
                 deactivate()
             } else {
                 activate()
             }
-            isActivated = !isActivated
         }
     }
+
 
     private fun populateFields() {
         savedTimerName = arguments?.getString("name") ?: ""
@@ -92,6 +97,8 @@ class SavedTimerPanel: Fragment(R.layout.saved_timer_panel) {
         binding.editButton.isEnabled = true
         binding.deleteButton.isEnabled = true
         binding.toggleActiveButton.text = "A"
+        isActivated = false
+        updateToggleActiveButtonCallback()
     }
 
     fun deactivate() {
