@@ -1,5 +1,6 @@
 package brooks.SaveableTimers.views
 
+import android.content.Intent
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.net.Uri
@@ -7,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import brooks.SaveableTimers.Operations.TimerOperations
 import brooks.SaveableTimers.data.ActiveTimer
 import brooks.SaveableTimers.data.AppDatabase
@@ -25,6 +27,7 @@ class RingingScreen : AppCompatActivity() {
     private val className: String = "RingingScreen"
     lateinit var db: AppDatabase
     private var mediaPlayer: MediaPlayer? = MediaPlayer()
+    var savedTimerId: Int = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = RingingViewBinding.inflate(layoutInflater)
@@ -32,7 +35,7 @@ class RingingScreen : AppCompatActivity() {
         db = AppDatabase.getInstance(this)
         Log.d(className, "view in response to alarm")
 
-        val savedTimerId: Int = intent.getIntExtra("saved_timer_id", -1)
+        savedTimerId = intent.getIntExtra("saved_timer_id", -1)
         if (savedTimerId == -1) {
             Log.d(className, "saved timer id from bundle wasn't found")
             return
@@ -57,6 +60,11 @@ class RingingScreen : AppCompatActivity() {
     private fun dismissAlarm() {
         mediaPlayer?.release()
         mediaPlayer = null
+        val localBroadcastManager = LocalBroadcastManager.getInstance(this)
+        val alarmDismissedIntent = Intent()//TODO use intent factory
+        alarmDismissedIntent.action = SavedTimersScreen.TIMER_WAS_DISMISSED_INTENT
+        alarmDismissedIntent.putExtra(SavedTimersScreen.RINGER_INTENT_TIMER_ID, savedTimerId)
+        localBroadcastManager.sendBroadcast(alarmDismissedIntent)
         finish();
     }
 

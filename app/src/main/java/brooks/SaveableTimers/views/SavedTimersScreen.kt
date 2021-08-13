@@ -2,13 +2,17 @@ package brooks.SaveableTimers.views
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import brooks.SaveableTimers.Intents.IntentFactory
 import brooks.SaveableTimers.Operations.TimerOperations
 import brooks.SaveableTimers.R
@@ -70,9 +74,35 @@ class SavedTimersScreen : AppCompatActivity() {
                     add(R.id.saved_timers_container, newFragment)
                 }
             }
-//            }
+        }
+
+        val broadcastReceiver = UpdateReceiver()
+        broadcastReceiver.updateActivityCallback = ::deactivateTimerPanel
+        val localBroadcastManager = LocalBroadcastManager.getInstance(this)
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(TIMER_WAS_DISMISSED_INTENT)
+        localBroadcastManager.registerReceiver(broadcastReceiver, intentFilter)
+    }
+
+    private fun deactivateTimerPanel(savedTimerId: Int) {
+        timerViewMap[savedTimerId]?.updateViewToNotActive()
+    }
+
+    class UpdateReceiver : BroadcastReceiver() {
+        lateinit var updateActivityCallback: (savedTimerId: Int) -> Unit?
+        override fun onReceive(context: Context, intent: Intent): Unit {
+            if (intent == null) {
+                Log.e("SavedTimersScreen", "no intent!")
+            }
+            val savedTimerId = intent.getIntExtra(RINGER_INTENT_TIMER_ID, -1)
+            if (savedTimerId == -1) {
+                Log.e("SavedTimersScreen", "intent didn't have saved timer id with key $RINGER_INTENT_TIMER_ID")
+            } else if (updateActivityCallback != null) {
+                updateActivityCallback(savedTimerId)
+            }
         }
     }
+
 
     //TODO boot up create screen, pre-pop the current data and then allow them to re-save it
     private fun editSavedTimer(uuid: Int) {
@@ -142,5 +172,6 @@ class SavedTimersScreen : AppCompatActivity() {
 
     companion object{
         const val RINGER_INTENT_TIMER_ID = "saved_timer_id"
+        const val TIMER_WAS_DISMISSED_INTENT = "TIMER_WAS_DISMISSED"
     }
 }

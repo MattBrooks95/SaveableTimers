@@ -88,10 +88,14 @@ class SavedTimerPanel: Fragment(R.layout.saved_timer_panel) {
         }
     }
 
-    fun deactivate() {
+    fun updateViewToNotActive() {
         binding.editButton.isEnabled = true
         binding.deleteButton.isEnabled = true
         binding.toggleActiveButton.text = "A"
+    }
+
+    fun deactivate() {
+        updateViewToNotActive()
         if (::deactivateCallback.isInitialized) {
             deactivateCallback(savedTimerId)
         }
