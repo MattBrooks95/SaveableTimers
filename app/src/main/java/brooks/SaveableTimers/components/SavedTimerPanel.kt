@@ -9,7 +9,8 @@ import brooks.SaveableTimers.R
 import brooks.SaveableTimers.databinding.SavedTimerPanelBinding
 
 
-class SavedTimerPanel: Fragment(R.layout.saved_timer_panel) {
+class SavedTimerPanel(): Fragment(R.layout.saved_timer_panel) {
+
     lateinit var savedTimerName: String
     lateinit var savedTimerDescription: String
     private var savedTimerId: Int = 0
@@ -24,7 +25,15 @@ class SavedTimerPanel: Fragment(R.layout.saved_timer_panel) {
     private var _binding: SavedTimerPanelBinding? = null
     private val binding get() = _binding!!
 
+    //so that the isActivated value can be set from outside BEFORE this fragment is done being created
+    //isActivated's setter will try to update views that don't exist yet
+    var initialActiveValue: Boolean = false
+
     private var isActivated: Boolean = false
+        set(newIsActivated) {
+            field = newIsActivated
+            updateStateToReflectActivationStatus()
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,6 +47,7 @@ class SavedTimerPanel: Fragment(R.layout.saved_timer_panel) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         populateFields()
         setHandlers()
+        isActivated = initialActiveValue
     }
 
     override fun onDestroyView() {
@@ -45,29 +55,53 @@ class SavedTimerPanel: Fragment(R.layout.saved_timer_panel) {
         _binding = null
     }
 
+    fun setActiveStatusFromOutside(newIsActivated: Boolean) {
+        isActivated = newIsActivated
+    }
+
+    private fun updateStateToReflectActivationStatus() {
+        if (isActivated) {
+            setButtonStateForActive()
+        } else {
+            setButtonStateForNotActive()
+        }
+
+        updateToggleActiveButtonCallback()
+    }
+
+    private fun setButtonStateForActive() {
+        binding.editButton.isEnabled = false
+        binding.deleteButton.isEnabled = false
+        binding.toggleActiveButton.text = "D"
+    }
+
+    private fun setButtonStateForNotActive() {
+        binding.editButton.isEnabled = true
+        binding.deleteButton.isEnabled = true
+        binding.toggleActiveButton.text = "A"
+    }
+
+
     private fun setHandlers() {
-        if (deleteCallback != null) {
+        if (deleteCallback != null && !binding.deleteButton.hasOnClickListeners()) {//TODO this could cause a bug if it was meant to have multiple listeners
             binding.deleteButton.setOnClickListener {
                 deleteCallback(savedTimerId)
             }
         }
 
-        if (editCallback != null) {
+        if (editCallback != null && !binding.editButton.hasOnClickListeners()) {//TODO this could cause a bug if it was meant to have multiple listeners
             binding.editButton.setOnClickListener {
                 editCallback(savedTimerId)
             }
         }
-
-        updateToggleActiveButtonCallback()
-        isActivated = !isActivated
     }
 
     private fun updateToggleActiveButtonCallback() {
         binding.toggleActiveButton.setOnClickListener {
             if (isActivated) {
-                deactivate()
+                runDeactivateCallback()
             } else {
-                activate()
+                runActivateCallback()
             }
         }
     }
@@ -84,28 +118,18 @@ class SavedTimerPanel: Fragment(R.layout.saved_timer_panel) {
         binding.durationField.text = savedTimerDuration.toString()
     }
 
-    fun activate() {
-        binding.editButton.isEnabled = false
-        binding.deleteButton.isEnabled = false
-        binding.toggleActiveButton.text = getString(R.string.deactivate)
+    private fun runActivateCallback() {
         if (::activateCallback.isInitialized) {
             activateCallback(savedTimerId)
         }
+        isActivated = true
     }
 
-    fun updateViewToNotActive() {
-        binding.editButton.isEnabled = true
-        binding.deleteButton.isEnabled = true
-        binding.toggleActiveButton.text = "A"
-        isActivated = false
-        updateToggleActiveButtonCallback()
-    }
-
-    fun deactivate() {
-        updateViewToNotActive()
+    private fun runDeactivateCallback() {
         if (::deactivateCallback.isInitialized) {
             deactivateCallback(savedTimerId)
         }
+        isActivated = false
     }
 
 

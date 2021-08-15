@@ -22,6 +22,7 @@ import brooks.SaveableTimers.components.SavedTimerPanel
 import brooks.SaveableTimers.data.ActiveTimer
 import brooks.SaveableTimers.data.AppDatabase
 import brooks.SaveableTimers.data.SaveableTimer
+import brooks.SaveableTimers.data.SaveableTimerWithNumberOfActiveActiveEntries
 
 import brooks.SaveableTimers.databinding.ActivitySavedTimersScreenBinding
 import kotlinx.coroutines.MainScope
@@ -48,15 +49,17 @@ class SavedTimersScreen : AppCompatActivity() {
         val appContext = this
 
         scope.launch{
-            val timers: List<SaveableTimer> = loadTimers()
+//            val timers: List<SaveableTimer> = loadTimers()
+            val timers: List<SaveableTimerWithNumberOfActiveActiveEntries> = loadTimers()
             Log.d(className,"within the loop to make timer elements, length:" + timers.size)
             timers.forEach {
-                timerDataMap[it.uid] = it
+                timerDataMap[it.saveableTimer.uid] = it.saveableTimer
             }
 
             supportFragmentManager.commit{
-                timers.forEachIndexed { index, timer ->
+                timers.forEachIndexed { index, timerAndActive ->
                     val bundle = Bundle()
+                    val timer = timerAndActive.saveableTimer
                     bundle.putString("name", timer.displayName)
                     bundle.putString("description", timer.description)
                     bundle.putInt("id", timer.uid)
@@ -71,6 +74,7 @@ class SavedTimersScreen : AppCompatActivity() {
                     newFragment.setEditButtonCallbackProperty(::editSavedTimer)
                     newFragment.setActivateButtonCallback(::activateTimer)
                     newFragment.setDeactivateButtonCallback(::deactivateTimer)
+                    newFragment.initialActiveValue = timerAndActive.numberOfActiveActiveEntries > 0
                     add(R.id.saved_timers_container, newFragment)
                 }
             }
@@ -85,7 +89,7 @@ class SavedTimersScreen : AppCompatActivity() {
     }
 
     private fun deactivateTimerPanel(savedTimerId: Int) {
-        timerViewMap[savedTimerId]?.updateViewToNotActive()
+        timerViewMap[savedTimerId]?.setActiveStatusFromOutside(false)
     }
 
     class UpdateReceiver : BroadcastReceiver() {
@@ -166,9 +170,14 @@ class SavedTimersScreen : AppCompatActivity() {
         }
     }
 
+    private suspend fun loadTimers(): List<SaveableTimerWithNumberOfActiveActiveEntries> {
+        return db.saveableTimerDao().getAllAndActiveStatus()
+    }
+/*
     private suspend fun loadTimers(): List<SaveableTimer> {
         return db.saveableTimerDao().getAll()
     }
+*/
 
     companion object{
         const val RINGER_INTENT_TIMER_ID = "saved_timer_id"
