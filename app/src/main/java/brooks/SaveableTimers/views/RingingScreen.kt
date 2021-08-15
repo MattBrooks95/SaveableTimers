@@ -7,13 +7,10 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import brooks.SaveableTimers.Operations.TimerOperations
-import brooks.SaveableTimers.data.ActiveTimer
 import brooks.SaveableTimers.data.AppDatabase
 import brooks.SaveableTimers.data.SaveableTimer
-import brooks.SaveableTimers.data.SaveableTimerWithActiveTimerEntries
 import brooks.SaveableTimers.databinding.RingingViewBinding
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch

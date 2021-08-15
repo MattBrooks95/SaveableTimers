@@ -19,10 +19,7 @@ import brooks.SaveableTimers.R
 import brooks.SaveableTimers.androidWrappers.AlarmWrapper
 import brooks.SaveableTimers.androidWrappers.SavedTimerReceiver
 import brooks.SaveableTimers.components.SavedTimerPanel
-import brooks.SaveableTimers.data.ActiveTimer
-import brooks.SaveableTimers.data.AppDatabase
-import brooks.SaveableTimers.data.SaveableTimer
-import brooks.SaveableTimers.data.SaveableTimerWithNumberOfActiveActiveEntries
+import brooks.SaveableTimers.data.*
 
 import brooks.SaveableTimers.databinding.ActivitySavedTimersScreenBinding
 import kotlinx.coroutines.MainScope
@@ -50,7 +47,7 @@ class SavedTimersScreen : AppCompatActivity() {
 
         scope.launch{
 //            val timers: List<SaveableTimer> = loadTimers()
-            val timers: List<SaveableTimerWithNumberOfActiveActiveEntries> = loadTimers()
+            val timers: List<SaveableTimerWithNumberOfActiveActiveTimerEntries> = loadTimers()
             Log.d(className,"within the loop to make timer elements, length:" + timers.size)
             timers.forEach {
                 timerDataMap[it.saveableTimer.uid] = it.saveableTimer
@@ -74,7 +71,7 @@ class SavedTimersScreen : AppCompatActivity() {
                     newFragment.setEditButtonCallbackProperty(::editSavedTimer)
                     newFragment.setActivateButtonCallback(::activateTimer)
                     newFragment.setDeactivateButtonCallback(::deactivateTimer)
-                    newFragment.initialActiveValue = timerAndActive.numberOfActiveActiveEntries > 0
+                    newFragment.initialActiveValue = timerAndActive.numberOfActiveActiveTimerEntries > 0
                     add(R.id.saved_timers_container, newFragment)
                 }
             }
@@ -170,7 +167,7 @@ class SavedTimersScreen : AppCompatActivity() {
         }
     }
 
-    private suspend fun loadTimers(): List<SaveableTimerWithNumberOfActiveActiveEntries> {
+    private suspend fun loadTimers(): List<SaveableTimerWithNumberOfActiveActiveTimerEntries> {
         return db.saveableTimerDao().getAllAndActiveStatus()
     }
 /*
