@@ -1,3 +1,5 @@
+save the unique URIs that point to the sound files that we copied into the application directory in another table, so that we can re-use files that were already copied w/o taking up space unnecessarily
+
 active_timers_screen -> add a "deactivate all" button, with a confirmation window
 fragment to display data (especially sound file name, timer name, ring time)
 	you will need to store the sound file name maybe? I think the filename saved in the database is the one made dynamically when it is copied to the app directory
