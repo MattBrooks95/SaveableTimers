@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import brooks.SaveableTimers.Intents.IntentFactory
 import brooks.SaveableTimers.Operations.TimerOperations
 import brooks.SaveableTimers.data.AppDatabase
 import brooks.SaveableTimers.data.SaveableTimer
@@ -58,9 +59,7 @@ class RingingScreen : AppCompatActivity() {
         mediaPlayer?.release()
         mediaPlayer = null
         val localBroadcastManager = LocalBroadcastManager.getInstance(this)
-        val alarmDismissedIntent = Intent()//TODO use intent factory
-        alarmDismissedIntent.action = SavedTimersScreen.TIMER_WAS_DISMISSED_INTENT
-        alarmDismissedIntent.putExtra(SavedTimersScreen.RINGER_INTENT_TIMER_ID, savedTimerId)
+        val alarmDismissedIntent = IntentFactory().createTimerWasDismissedIntent(this, savedTimerId)
         localBroadcastManager.sendBroadcast(alarmDismissedIntent)
         finish();
     }
