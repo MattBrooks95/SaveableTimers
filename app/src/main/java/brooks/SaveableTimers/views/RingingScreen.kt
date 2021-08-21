@@ -41,12 +41,20 @@ class RingingScreen : AppCompatActivity() {
 
         scope.launch {
             val savedTimer: SaveableTimer = getSavedTimerFromDb(savedTimerId)
-
-            populateTextFields(savedTimer)
-            ring(savedTimer.soundFilePath);
+            if (savedTimer.soundFileId != null) {
+                val soundFilePath = getSoundFilePathForId(savedTimer.soundFileId)
+                populateTextFields(savedTimer)
+                ring(soundFilePath);
+            } else {
+                Log.v(className,"::onCreate saveable timer has a null sound file id, need to use default ringer")
+            }
         }
         TimerOperations().deactivateTimer(this, db, savedTimerId)
         setHandlers();
+    }
+
+    private suspend fun getSoundFilePathForId(soundFileId: Int): String {
+        return db.soundFileDao().getSoundFileForId(soundFileId).uriPath
     }
 
     private fun setHandlers(){
@@ -70,6 +78,7 @@ class RingingScreen : AppCompatActivity() {
             soundFilePathToUse = soundFilePath
         } else {
             soundFilePathToUse = "TODO_DEFAULT_FILE_PATH"
+            Log.w(className, "sound file path was defaulted on the ringing screen!")
         }
         try {
             mediaPlayer?.isLooping = true
@@ -92,7 +101,7 @@ class RingingScreen : AppCompatActivity() {
     private fun populateTextFields(saveableTimer: SaveableTimer){
         binding.alarmDescription.text = saveableTimer.description
         binding.alarmName.text = saveableTimer.displayName
-        Log.d(className, "sound file path?:" + saveableTimer.soundFilePath)
+        Log.d(className, "sound file id?:" + saveableTimer.soundFileId)
     }
 
     private suspend fun getSavedTimerFromDb(uuid: Int): SaveableTimer {

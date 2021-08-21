@@ -12,5 +12,7 @@ data class SaveableTimer(
     @ColumnInfo(name = "display_name") val displayName: String?,
     @ColumnInfo(name = "duration") val duration: Int,
     @ColumnInfo(name = "description")  val description: String?,
-    @ColumnInfo(name = "sound_file_path") val soundFilePath: String?
+//    @ColumnInfo(name = "sound_file_path") val soundFilePath: String?
+    @ColumnInfo(name = "sound_file_id") val soundFileId: Int?
+
 )

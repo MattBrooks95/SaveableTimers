@@ -11,8 +11,10 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import brooks.SaveableTimers.data.AppDatabase
 import brooks.SaveableTimers.data.SaveableTimer
+import brooks.SaveableTimers.data.SoundFile
 import brooks.SaveableTimers.databinding.ActivityCreateTimerScreenBinding
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.CoroutineScope
@@ -52,20 +54,36 @@ class CreateTimerScreen : AppCompatActivity() {
             val durationTextInput = binding.durationTextInput.text
             if (durationTextInput.isNullOrEmpty()) return@setOnClickListener
             val timerDao = db.saveableTimerDao()
-            //the ID is auto generated, but when you make an instance of the DAO you have to specify a value, so setting the int to 0
-            //is necessary. I had it set to 1, and it would crash because it would use 1 on the insert, and violate primary key uniqueness
-            var newSaveableTimer = SaveableTimer(
+            //so we can access app context in the coroutine
+            val appContext = this
+            scope.launch {
+                var alreadyExistingSoundFile: SoundFile? = null
+                val soundFilePath = newSoundFilePath
+                if (soundFilePath != null) {
+                   alreadyExistingSoundFile = db.soundFileDao().getSoundFileForPath(soundFilePath)
+                }
+
+                var soundFileIdForInsert: Int? = null
+                if (alreadyExistingSoundFile != null) {
+                    soundFileIdForInsert = alreadyExistingSoundFile.uid
+                } else if(soundFilePath != null) {
+                    val newSoundFile = SoundFile(0, soundFilePath)
+                    soundFileIdForInsert = db.soundFileDao().insert(newSoundFile).toInt()
+//                    soundFileIdForInsert = db.soundFileDao().getMostRecentInsertId()
+                }
+                //the ID is auto generated, but when you make an instance of the DAO you have to specify a value, so setting the int to 0
+                //is necessary. I had it set to 1, and it would crash because it would use 1 on the insert, and violate primary key uniqueness
+                var newSaveableTimer = SaveableTimer(
                     0,
                     binding.timerNameField.text.toString(),
                     getDurationFloatFromEditableText(durationTextInput),
                     binding.timerDescriptionField.text.toString(),
-                    newSoundFilePath)
-            scope.launch {
+                    soundFileIdForInsert)
                 timerDao.insertAll(newSaveableTimer)
+                Log.d(className, "made a saveable timer entry")
+                val intent = Intent(appContext, ActiveTimersScreen::class.java)
+                startActivity(intent)
             }
-            Log.d(className, "made a saveable timer entry")
-            val intent = Intent(this, ActiveTimersScreen::class.java)
-            startActivity(intent)
         }
 
         binding.selectSoundFileButton.setOnClickListener {
@@ -92,16 +110,25 @@ class CreateTimerScreen : AppCompatActivity() {
             val selectedFileInputStream = contentResolver.openInputStream(uri)
             if (selectedFileInputStream != null) {
 //            val inputStream: InputStream = FileInputStream(selectedFile)
-                val outputFilePath = appDirectory.path + "/" + System.currentTimeMillis()
-                val outputFile = File(outputFilePath)
-                selectedFileInputStream.copyTo(FileOutputStream(outputFile))
-                newSoundFilePath = outputFilePath
-                Log.d(className, "set sound file path attribute:" + newSoundFilePath)
-//            val outputStream = FileOutputStream(outputFile)
-//            val buffer: ByteArray = ByteArray(2048)
-//            while((readAmount = inputStream.read(buffer)) {
-//
-//            }
+                if (uri.path == null) {
+                    Log.e(className, "Selected file's URI path was null????")
+                } else {
+                    /*anyway,so that the user can use two different sound files that may have the same file name
+                     *convert the original path to a file name. This may be dumb
+                     *basically something like /document/audio:20 will be converted to _document_audio_20 as a file name
+                     * I can't use the real file name because I have no idea how to get it from the URI and the android docs are less than helpful
+                     * if you only convert / to _, the : would make it so that the media player couldn't play the file
+                     * I assume the presence of the : messed up the way the uri was parsed when the OS tried to open it
+                     * I need to extract this path translation to a function that can be reused, so that when I check to see if a file has already been saved
+                     * I can use the after-conversion file name
+                     * I'm worried that the user selecting the same file twice could result into two different URIS somehow...
+                    */
+                    val outputFilePath = appDirectory.path + "/" + (uri.path as String).replace(Regex("[/:]"),"_")
+                    val outputFile = File(outputFilePath)
+                    selectedFileInputStream.copyTo(FileOutputStream(outputFile))
+                    newSoundFilePath = outputFilePath
+                    Log.d(className, "set sound file path attribute:$newSoundFilePath")
+                }
             } else {
                 Log.e(className, "TODO FILE OPERATIONS FAILED, USE DEFAULT")
             }

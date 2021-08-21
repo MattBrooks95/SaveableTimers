@@ -5,10 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [SaveableTimer::class, ActiveTimer::class], version=7)
+@Database(entities = [SaveableTimer::class, ActiveTimer::class, SoundFile::class], version=9)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun saveableTimerDao(): SaveableTimerDao
     abstract fun activeTimerDao(): ActiveTimerDao
+    abstract fun soundFileDao(): SoundFileDao
 
     //singleton implementation reference https://github.com/android/sunflower/blob/main/app/src/main/java/com/google/samples/apps/sunflower/data/AppDatabase.kt
     companion object {
