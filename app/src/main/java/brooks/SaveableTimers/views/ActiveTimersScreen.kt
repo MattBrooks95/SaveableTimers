@@ -1,5 +1,7 @@
 package brooks.SaveableTimers.views
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
@@ -27,7 +29,7 @@ class ActiveTimersScreen: AppCompatActivity() {
     private lateinit var db: AppDatabase;
     private val className: String = "ActiveTimersScreen"
     private var timerViewMap: MutableMap<Int, ActiveTimerPanel> = mutableMapOf()
-
+    private lateinit var broadcastReceiver: BroadcastReceiver
     val scope = MainScope()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,17 +67,51 @@ class ActiveTimersScreen: AppCompatActivity() {
                 }
             }
         }
+    }
 
+    override fun onResume() {
+        super.onResume()
         setupAlarmRangMessageReceiver()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        tearDownAlarmRangMessageReceiver()
+    }
+
     private fun setupAlarmRangMessageReceiver() {
-        val broadcastReceiver = SavedTimersScreen.UpdateReceiver()
-        broadcastReceiver.updateActivityCallback = ::removeActiveTimerPanel
+        broadcastReceiver = UpdateReceiver()
+        (broadcastReceiver as UpdateReceiver).updateActivityCallback = ::removeActiveTimerPanel
         val localBroadcastManager = LocalBroadcastManager.getInstance(this)
         val intentFilter = IntentFilter()
         intentFilter.addAction(SavedTimersScreen.TIMER_WAS_DISMISSED_INTENT)
         localBroadcastManager.registerReceiver(broadcastReceiver, intentFilter)
+    }
+
+    //TODO on resume, on destroy, receiver's code should be able to be put in a parent class or something
+    //TODO we enter the callback twice for some reason, I think some wires are crossed between the saved and active timer screens
+    class UpdateReceiver : BroadcastReceiver() {
+        lateinit var updateActivityCallback: (savedTimerId: Int) -> Unit?
+        override fun onReceive(context: Context, intent: Intent): Unit {
+            if (intent == null) {
+                Log.e("ActiveTimersScreen", "no intent!")
+            }
+            val savedTimerId = intent.getIntExtra(SavedTimersScreen.RINGER_INTENT_TIMER_ID, -1)
+            if (savedTimerId == -1) {
+                Log.e("ActiveTimersScreen", "intent didn't have saved timer id with key ${SavedTimersScreen.RINGER_INTENT_TIMER_ID}")
+            } else if (updateActivityCallback != null) {
+                updateActivityCallback(savedTimerId)
+            }
+        }
+    }
+
+    private fun getLocalBroadCastManager(): LocalBroadcastManager {
+        return LocalBroadcastManager.getInstance(this)
+    }
+
+    private fun tearDownAlarmRangMessageReceiver() {
+        val localBroadcastManager = getLocalBroadCastManager()
+        localBroadcastManager.unregisterReceiver(broadcastReceiver)
     }
 
     private fun removeActiveTimerPanel(savedTimerId: Int) {
