@@ -1,6 +1,7 @@
 package brooks.SaveableTimers.views
 
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.widget.LinearLayout
@@ -8,6 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import brooks.SaveableTimers.Intents.IntentFactory
 import brooks.SaveableTimers.Operations.TimerOperations
 import brooks.SaveableTimers.R
@@ -61,6 +63,26 @@ class ActiveTimersScreen: AppCompatActivity() {
                     add(R.id.active_timers_container, newFragment)
                     timerViewMap.put(timer.uid, newFragment)
                 }
+            }
+        }
+
+        setupAlarmRangMessageReceiver()
+    }
+
+    private fun setupAlarmRangMessageReceiver() {
+        val broadcastReceiver = SavedTimersScreen.UpdateReceiver()
+        broadcastReceiver.updateActivityCallback = ::removeActiveTimerPanel
+        val localBroadcastManager = LocalBroadcastManager.getInstance(this)
+        val intentFilter = IntentFilter()
+        intentFilter.addAction(SavedTimersScreen.TIMER_WAS_DISMISSED_INTENT)
+        localBroadcastManager.registerReceiver(broadcastReceiver, intentFilter)
+    }
+
+    private fun removeActiveTimerPanel(savedTimerId: Int) {
+        val activeSavedTimerView = timerViewMap[savedTimerId]
+        if (activeSavedTimerView != null) {
+            supportFragmentManager.commit {
+                remove(activeSavedTimerView)
             }
         }
     }

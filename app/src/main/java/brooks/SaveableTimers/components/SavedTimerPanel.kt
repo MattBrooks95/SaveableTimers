@@ -83,15 +83,15 @@ class SavedTimerPanel(): Fragment(R.layout.saved_timer_panel) {
 
 
     private fun setHandlers() {
-        if (deleteCallback != null && !binding.deleteButton.hasOnClickListeners()) {//TODO this could cause a bug if it was meant to have multiple listeners
+        if (::deleteCallback.isInitialized && !binding.deleteButton.hasOnClickListeners()) {//TODO this could cause a bug if it was meant to have multiple listeners
             binding.deleteButton.setOnClickListener {
-                deleteCallback(savedTimerId)
+                deleteCallback?.invoke(savedTimerId)
             }
         }
 
-        if (editCallback != null && !binding.editButton.hasOnClickListeners()) {//TODO this could cause a bug if it was meant to have multiple listeners
+        if (::editCallback.isInitialized && !binding.editButton.hasOnClickListeners()) {//TODO this could cause a bug if it was meant to have multiple listeners
             binding.editButton.setOnClickListener {
-                editCallback(savedTimerId)
+                editCallback?.invoke(savedTimerId)
             }
         }
     }

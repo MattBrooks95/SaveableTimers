@@ -33,6 +33,7 @@ class SavedTimersScreen : AppCompatActivity() {
     private val className: String = "SavedTimersScreen"
     private var timerViewMap: MutableMap<Int, SavedTimerPanel> = mutableMapOf()
     private var timerDataMap: MutableMap<Int, SaveableTimer> = mutableMapOf()
+    private lateinit var broadcastReceiver: BroadcastReceiver
     val scope = MainScope()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,13 +77,36 @@ class SavedTimersScreen : AppCompatActivity() {
                 }
             }
         }
+    }
 
-        val broadcastReceiver = UpdateReceiver()
-        broadcastReceiver.updateActivityCallback = ::deactivateTimerPanel
-        val localBroadcastManager = LocalBroadcastManager.getInstance(this)
+    override fun onResume() {
+        super.onResume()
+        setupAlarmRangMessageReceiver()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        tearDownAlarmRangMessageReceiver()
+    }
+
+    /*when an alarm rings, the view for that alarm on this screen is probably displayed as active,
+    * so we need to change it back to inactive (because it rang and was dismissed */
+    private fun setupAlarmRangMessageReceiver() {
+        broadcastReceiver = UpdateReceiver()
+        (broadcastReceiver as UpdateReceiver).updateActivityCallback = ::deactivateTimerPanel
+        val localBroadcastManager = getLocalBroadCastManager()
         val intentFilter = IntentFilter()
         intentFilter.addAction(TIMER_WAS_DISMISSED_INTENT)
         localBroadcastManager.registerReceiver(broadcastReceiver, intentFilter)
+    }
+
+    private fun getLocalBroadCastManager(): LocalBroadcastManager {
+        return LocalBroadcastManager.getInstance(this)
+    }
+
+    private fun tearDownAlarmRangMessageReceiver() {
+        val localBroadcastManager = getLocalBroadCastManager()
+        localBroadcastManager.unregisterReceiver(broadcastReceiver)
     }
 
     private fun deactivateTimerPanel(savedTimerId: Int) {
