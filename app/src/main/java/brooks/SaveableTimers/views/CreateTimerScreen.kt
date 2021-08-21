@@ -12,6 +12,7 @@ import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import brooks.SaveableTimers.Intents.IntentFactory
 import brooks.SaveableTimers.data.AppDatabase
 import brooks.SaveableTimers.data.SaveableTimer
 import brooks.SaveableTimers.data.SoundFile
@@ -47,7 +48,7 @@ class CreateTimerScreen : AppCompatActivity() {
 
     private fun setHandlers() {
         binding.cancelTimerCreation.setOnClickListener {
-            val intent = Intent(this, ActiveTimersScreen::class.java)
+            val intent = IntentFactory().createGoToActiveTimersScreenIntent(this)
             startActivity(intent)
         }
         binding.createTimerButton.setOnClickListener {
@@ -81,7 +82,7 @@ class CreateTimerScreen : AppCompatActivity() {
                     soundFileIdForInsert)
                 timerDao.insertAll(newSaveableTimer)
                 Log.d(className, "made a saveable timer entry")
-                val intent = Intent(appContext, ActiveTimersScreen::class.java)
+                val intent = IntentFactory().createGoToActiveTimersScreenIntent(appContext)
                 startActivity(intent)
             }
         }

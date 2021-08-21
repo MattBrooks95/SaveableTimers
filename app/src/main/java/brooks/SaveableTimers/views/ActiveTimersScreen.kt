@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import brooks.SaveableTimers.Intents.IntentFactory
 import brooks.SaveableTimers.Operations.TimerOperations
 import brooks.SaveableTimers.R
 import brooks.SaveableTimers.components.ActiveTimerPanel
@@ -79,14 +80,14 @@ class ActiveTimersScreen: AppCompatActivity() {
         val toCreateTimerScreenButton = binding.navigateCreateTimerButton
         toCreateTimerScreenButton.setOnClickListener {
             Log.d(className, "Go to make timer screen")
-            val goToCreateTimerIntent = Intent(this, CreateTimerScreen::class.java)
+            val goToCreateTimerIntent = IntentFactory().makeGoToCreateTimerScreenIntent(this)
             startActivity(goToCreateTimerIntent)
         }
 
         val toSavedTimersScreenButton = binding.navigateSavedTimersButton
         toSavedTimersScreenButton.setOnClickListener {
             Log.d(className, "go to saved timers screen")
-            val goToSavedTimersScreenIntent = Intent(this, SavedTimersScreen::class.java)
+            val goToSavedTimersScreenIntent = IntentFactory().makeGoToSavedTimersScreenIntent(this)
             startActivity(goToSavedTimersScreenIntent);
         }
     }
