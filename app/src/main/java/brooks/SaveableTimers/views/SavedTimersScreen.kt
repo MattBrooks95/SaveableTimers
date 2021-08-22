@@ -35,6 +35,7 @@ class SavedTimersScreen : AppCompatActivity() {
     private var timerDataMap: MutableMap<Int, SaveableTimer> = mutableMapOf()
     private lateinit var broadcastReceiver: BroadcastReceiver
     val scope = MainScope()
+    private var receiverIsRegistered: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySavedTimersScreenBinding.inflate(layoutInflater)
@@ -81,23 +82,29 @@ class SavedTimersScreen : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        setupAlarmRangMessageReceiver()
+        if (!receiverIsRegistered){
+            setupAlarmRangMessageReceiver()
+        }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        tearDownAlarmRangMessageReceiver()
+        if (receiverIsRegistered) {
+            tearDownAlarmRangMessageReceiver()
+        }
     }
 
     /*when an alarm rings, the view for that alarm on this screen is probably displayed as active,
     * so we need to change it back to inactive (because it rang and was dismissed */
     private fun setupAlarmRangMessageReceiver() {
+        return
         broadcastReceiver = UpdateReceiver()
         (broadcastReceiver as UpdateReceiver).updateActivityCallback = ::deactivateTimerPanel
         val localBroadcastManager = getLocalBroadCastManager()
         val intentFilter = IntentFilter()
         intentFilter.addAction(TIMER_WAS_DISMISSED_INTENT)
         localBroadcastManager.registerReceiver(broadcastReceiver, intentFilter)
+        receiverIsRegistered = true
     }
 
     private fun getLocalBroadCastManager(): LocalBroadcastManager {
@@ -105,8 +112,10 @@ class SavedTimersScreen : AppCompatActivity() {
     }
 
     private fun tearDownAlarmRangMessageReceiver() {
+        return
         val localBroadcastManager = getLocalBroadCastManager()
         localBroadcastManager.unregisterReceiver(broadcastReceiver)
+        receiverIsRegistered = false
     }
 
     private fun deactivateTimerPanel(savedTimerId: Int) {

@@ -7,7 +7,6 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
@@ -16,7 +15,6 @@ import brooks.SaveableTimers.Intents.IntentFactory
 import brooks.SaveableTimers.Operations.TimerOperations
 import brooks.SaveableTimers.R
 import brooks.SaveableTimers.components.ActiveTimerPanel
-import brooks.SaveableTimers.components.SavedTimerPanel
 import brooks.SaveableTimers.data.AppDatabase
 import brooks.SaveableTimers.data.SaveableTimer
 import brooks.SaveableTimers.databinding.ActiveTimersScreenBinding
@@ -29,9 +27,7 @@ class ActiveTimersScreen: AppCompatActivity() {
     private lateinit var db: AppDatabase;
     private val className: String = "ActiveTimersScreen"
     private var timerViewMap: MutableMap<Int, ActiveTimerPanel> = mutableMapOf()
-    private lateinit var broadcastReceiver: BroadcastReceiver
-    val scope = MainScope()
-
+    private val scope = MainScope()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActiveTimersScreenBinding.inflate(layoutInflater)
@@ -45,11 +41,17 @@ class ActiveTimersScreen: AppCompatActivity() {
                 0.25f
         )
         newLayoutParams.bottomMargin = 5
-        val appContext = this
+    }
 
+    override fun onStart() {
+        super.onStart()
         scope.launch {
             val timers: List<SaveableTimer> = db.activeTimerDao().getAllActiveSaveableTimers()
             supportFragmentManager.commit {
+                timerViewMap.forEach {
+                    remove(it.value)
+                }
+                timerViewMap.clear()
                 timers.forEachIndexed { index, timer ->
                     val bundle = Bundle()
                     bundle.putString("name", timer.displayName)
@@ -63,62 +65,8 @@ class ActiveTimersScreen: AppCompatActivity() {
                     newFragment.arguments = bundle
                     newFragment.setDeactivateButtonCallback(::deactivateTimer)
                     add(R.id.active_timers_container, newFragment)
-                    timerViewMap.put(timer.uid, newFragment)
+                    timerViewMap[timer.uid] = newFragment
                 }
-            }
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setupAlarmRangMessageReceiver()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        tearDownAlarmRangMessageReceiver()
-    }
-
-    private fun setupAlarmRangMessageReceiver() {
-        broadcastReceiver = UpdateReceiver()
-        (broadcastReceiver as UpdateReceiver).updateActivityCallback = ::removeActiveTimerPanel
-        val localBroadcastManager = LocalBroadcastManager.getInstance(this)
-        val intentFilter = IntentFilter()
-        intentFilter.addAction(SavedTimersScreen.TIMER_WAS_DISMISSED_INTENT)
-        localBroadcastManager.registerReceiver(broadcastReceiver, intentFilter)
-    }
-
-    //TODO on resume, on destroy, receiver's code should be able to be put in a parent class or something
-    //TODO we enter the callback twice for some reason, I think some wires are crossed between the saved and active timer screens
-    class UpdateReceiver : BroadcastReceiver() {
-        lateinit var updateActivityCallback: (savedTimerId: Int) -> Unit?
-        override fun onReceive(context: Context, intent: Intent): Unit {
-            if (intent == null) {
-                Log.e("ActiveTimersScreen", "no intent!")
-            }
-            val savedTimerId = intent.getIntExtra(SavedTimersScreen.RINGER_INTENT_TIMER_ID, -1)
-            if (savedTimerId == -1) {
-                Log.e("ActiveTimersScreen", "intent didn't have saved timer id with key ${SavedTimersScreen.RINGER_INTENT_TIMER_ID}")
-            } else if (updateActivityCallback != null) {
-                updateActivityCallback(savedTimerId)
-            }
-        }
-    }
-
-    private fun getLocalBroadCastManager(): LocalBroadcastManager {
-        return LocalBroadcastManager.getInstance(this)
-    }
-
-    private fun tearDownAlarmRangMessageReceiver() {
-        val localBroadcastManager = getLocalBroadCastManager()
-        localBroadcastManager.unregisterReceiver(broadcastReceiver)
-    }
-
-    private fun removeActiveTimerPanel(savedTimerId: Int) {
-        val activeSavedTimerView = timerViewMap[savedTimerId]
-        if (activeSavedTimerView != null) {
-            supportFragmentManager.commit {
-                remove(activeSavedTimerView)
             }
         }
     }
