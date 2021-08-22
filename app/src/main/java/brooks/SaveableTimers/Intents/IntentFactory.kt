@@ -16,14 +16,6 @@ class IntentFactory {
         return intent
     }
 
-    //TODO is it possible to specify the class here?
-    fun createTimerWasDismissedIntent(appContext: Context, timerId: Int): Intent {
-        val alarmDismissedIntent = Intent()
-        alarmDismissedIntent.action = SavedTimersScreen.TIMER_WAS_DISMISSED_INTENT
-        alarmDismissedIntent.putExtra(SavedTimersScreen.RINGER_INTENT_TIMER_ID, timerId)
-        return alarmDismissedIntent
-    }
-
     fun createGoToActiveTimersScreenIntent(appContext: Context): Intent {
         return Intent(appContext, ActiveTimersScreen::class.java)
     }

@@ -66,9 +66,6 @@ class RingingScreen : AppCompatActivity() {
     private fun dismissAlarm() {
         mediaPlayer?.release()
         mediaPlayer = null
-        val localBroadcastManager = LocalBroadcastManager.getInstance(this)
-        val alarmDismissedIntent = IntentFactory().createTimerWasDismissedIntent(this, savedTimerId)
-        localBroadcastManager.sendBroadcast(alarmDismissedIntent)
         finish();
     }
 

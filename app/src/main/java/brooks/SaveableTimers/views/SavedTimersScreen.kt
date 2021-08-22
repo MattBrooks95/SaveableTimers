@@ -33,30 +33,33 @@ class SavedTimersScreen : AppCompatActivity() {
     private val className: String = "SavedTimersScreen"
     private var timerViewMap: MutableMap<Int, SavedTimerPanel> = mutableMapOf()
     private var timerDataMap: MutableMap<Int, SaveableTimer> = mutableMapOf()
-    private lateinit var broadcastReceiver: BroadcastReceiver
-    val scope = MainScope()
-    private var receiverIsRegistered: Boolean = false
+    private val scope = MainScope()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySavedTimersScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setHandlers()
+    }
 
+    override fun onStart() {
+        super.onStart()
         db = AppDatabase.getInstance(this)
-        setHandlers()
-
-        val appContext = this
 
         scope.launch{
-//            val timers: List<SaveableTimer> = loadTimers()
+            timerDataMap.clear()
+
             val timers: List<SaveableTimerWithNumberOfActiveActiveTimerEntries> = loadTimers()
             Log.d(className,"within the loop to make timer elements, length:" + timers.size)
-            timers.forEach {
-                timerDataMap[it.saveableTimer.uid] = it.saveableTimer
-            }
 
             supportFragmentManager.commit{
-                timers.forEachIndexed { index, timerAndActive ->
+                timerViewMap.forEach {
+                    remove(it.value)
+                }
+                timerViewMap.clear()
+
+                timers.forEachIndexed { _, timerAndActive ->
+                    timerDataMap[timerAndActive.saveableTimer.uid] = timerAndActive.saveableTimer
+
                     val bundle = Bundle()
                     val timer = timerAndActive.saveableTimer
                     bundle.putString("name", timer.displayName)
@@ -80,64 +83,6 @@ class SavedTimersScreen : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (!receiverIsRegistered){
-            setupAlarmRangMessageReceiver()
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        if (receiverIsRegistered) {
-            tearDownAlarmRangMessageReceiver()
-        }
-    }
-
-    /*when an alarm rings, the view for that alarm on this screen is probably displayed as active,
-    * so we need to change it back to inactive (because it rang and was dismissed */
-    private fun setupAlarmRangMessageReceiver() {
-        return
-        broadcastReceiver = UpdateReceiver()
-        (broadcastReceiver as UpdateReceiver).updateActivityCallback = ::deactivateTimerPanel
-        val localBroadcastManager = getLocalBroadCastManager()
-        val intentFilter = IntentFilter()
-        intentFilter.addAction(TIMER_WAS_DISMISSED_INTENT)
-        localBroadcastManager.registerReceiver(broadcastReceiver, intentFilter)
-        receiverIsRegistered = true
-    }
-
-    private fun getLocalBroadCastManager(): LocalBroadcastManager {
-        return LocalBroadcastManager.getInstance(this)
-    }
-
-    private fun tearDownAlarmRangMessageReceiver() {
-        return
-        val localBroadcastManager = getLocalBroadCastManager()
-        localBroadcastManager.unregisterReceiver(broadcastReceiver)
-        receiverIsRegistered = false
-    }
-
-    private fun deactivateTimerPanel(savedTimerId: Int) {
-        timerViewMap[savedTimerId]?.setActiveStatusFromOutside(false)
-    }
-
-    class UpdateReceiver : BroadcastReceiver() {
-        lateinit var updateActivityCallback: (savedTimerId: Int) -> Unit?
-        override fun onReceive(context: Context, intent: Intent): Unit {
-            if (intent == null) {
-                Log.e("SavedTimersScreen", "no intent!")
-            }
-            val savedTimerId = intent.getIntExtra(RINGER_INTENT_TIMER_ID, -1)
-            if (savedTimerId == -1) {
-                Log.e("SavedTimersScreen", "intent didn't have saved timer id with key $RINGER_INTENT_TIMER_ID")
-            } else if (updateActivityCallback != null) {
-                updateActivityCallback(savedTimerId)
-            }
-        }
-    }
-
-
     //TODO boot up create screen, pre-pop the current data and then allow them to re-save it
     private fun editSavedTimer(uuid: Int) {
         Log.d(className, "edit uuid:$uuid")
@@ -151,11 +96,6 @@ class SavedTimersScreen : AppCompatActivity() {
             supportFragmentManager.commit {
                 remove(timerViewMap[uuid] as Fragment)
             }
-//            scope.launch {
-//                val timerDao = db.saveableTimerDao()
-//                timerDao.deleteAll(savedTimerPanel.savedTimerData);
-//                binding.savedTimersContainer.removeView(savedTimerPanel)
-//            }
         }
     }
 
@@ -203,14 +143,8 @@ class SavedTimersScreen : AppCompatActivity() {
     private suspend fun loadTimers(): List<SaveableTimerWithNumberOfActiveActiveTimerEntries> {
         return db.saveableTimerDao().getAllAndActiveStatus()
     }
-/*
-    private suspend fun loadTimers(): List<SaveableTimer> {
-        return db.saveableTimerDao().getAll()
-    }
-*/
 
     companion object{
         const val RINGER_INTENT_TIMER_ID = "saved_timer_id"
-        const val TIMER_WAS_DISMISSED_INTENT = "TIMER_WAS_DISMISSED"
     }
 }
