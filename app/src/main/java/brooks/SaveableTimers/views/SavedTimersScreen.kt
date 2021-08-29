@@ -2,17 +2,12 @@ package brooks.SaveableTimers.views
 
 import android.app.AlarmManager
 import android.app.PendingIntent
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import brooks.SaveableTimers.Intents.IntentFactory
 import brooks.SaveableTimers.Operations.TimerOperations
 import brooks.SaveableTimers.R
@@ -110,7 +105,7 @@ class SavedTimersScreen : AppCompatActivity() {
             val intent = IntentFactory().createActiveTimerIntent(this, SavedTimerReceiver::class, savedTimerId)
 
             val pendingIntent = intent.let { intent ->
-                PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+                PendingIntent.getBroadcast(this, savedTimerId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
             }
 
             //mins * 60 = seconds, seconds * 1000 = duration in millis
@@ -129,7 +124,7 @@ class SavedTimersScreen : AppCompatActivity() {
 
     private fun deactivateTimer(uid: Int) {
         Log.d(className, "deactivate timer:$uid")
-        TimerOperations().deactivateTimer(this, db, uid);
+        TimerOperations().killIntentAndActiveTimerEntries(this, db, uid);
     }
 
     private fun setHandlers() {

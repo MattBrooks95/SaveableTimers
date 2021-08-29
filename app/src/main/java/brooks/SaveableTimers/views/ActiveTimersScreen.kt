@@ -1,16 +1,11 @@
 package brooks.SaveableTimers.views
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import brooks.SaveableTimers.Intents.IntentFactory
 import brooks.SaveableTimers.Operations.TimerOperations
 import brooks.SaveableTimers.R
@@ -72,7 +67,7 @@ class ActiveTimersScreen: AppCompatActivity() {
     }
 
     private fun deactivateTimer(savedTimerId: Int) {
-        TimerOperations().deactivateTimer(this, db, savedTimerId)
+        TimerOperations().killIntentAndActiveTimerEntries(this, db, savedTimerId)
         val savedTimerView = timerViewMap.get(savedTimerId)
         supportFragmentManager.commit {
             supportFragmentManager.commit {

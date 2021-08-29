@@ -1,14 +1,11 @@
 package brooks.SaveableTimers.views
 
-import android.content.Intent
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import brooks.SaveableTimers.Intents.IntentFactory
 import brooks.SaveableTimers.Operations.TimerOperations
 import brooks.SaveableTimers.data.AppDatabase
 import brooks.SaveableTimers.data.SaveableTimer
@@ -49,7 +46,8 @@ class RingingScreen : AppCompatActivity() {
                 Log.v(className,"::onCreate saveable timer has a null sound file id, need to use default ringer")
             }
         }
-        TimerOperations().deactivateTimer(this, db, savedTimerId)
+//        TimerOperations().killIntentAndActiveTimerEntries(this, db, savedTimerId)
+        TimerOperations().deactivateActiveTimerEntries(this, db, savedTimerId)
         setHandlers();
     }
 

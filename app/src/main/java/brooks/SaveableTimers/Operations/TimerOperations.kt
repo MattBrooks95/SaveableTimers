@@ -18,7 +18,7 @@ class TimerOperations {
     val className: String = "TimerOperations"
     private val scope: CoroutineScope = MainScope()
 
-    fun deactivateTimer(context: Context, db: AppDatabase, timerId: Int) {
+    fun killIntentAndActiveTimerEntries(context: Context, db: AppDatabase, timerId: Int) {
         Log.d(className, "deactivate timer:$timerId")
         killTimerIntent(context, timerId)
         deactivateActiveTimerEntries(context, db, timerId)
@@ -29,12 +29,12 @@ class TimerOperations {
         val intent = IntentFactory().createActiveTimerIntent(context, SavedTimerReceiver::class, timerId)
 
         val pendingIntent = intent.let { intent ->
-            PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            PendingIntent.getBroadcast(context, timerId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
         }
         AlarmWrapper.getInstance(context).cancel(pendingIntent)
     }
 
-    private fun deactivateActiveTimerEntries(context: Context, db: AppDatabase, timerId: Int) {
+    fun deactivateActiveTimerEntries(context: Context, db: AppDatabase, timerId: Int) {
         scope.launch {
             val timersToTurnOff: List<ActiveTimer> = db.activeTimerDao().getActiveActiveTimerEntriesForSavedTimerId(timerId)
             val mutableTimersToTurnOff = timersToTurnOff.toMutableList()
