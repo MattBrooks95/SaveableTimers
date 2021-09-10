@@ -15,6 +15,7 @@
         android:layout_height="0dp">
         <TextView
             android:id="@+id/alarm_name"
+            android:textSize="30sp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -23,6 +24,7 @@
             android:minWidth="50dp"
             ></TextView>
         <TextView
+            android:textSize="30sp"
             android:id="@+id/alarm_description"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
