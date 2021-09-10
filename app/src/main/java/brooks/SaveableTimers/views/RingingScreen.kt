@@ -1,5 +1,7 @@
 package brooks.SaveableTimers.views
 
+import android.app.KeyguardManager
+import android.content.Context
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.net.Uri
@@ -30,12 +32,13 @@ class RingingScreen : AppCompatActivity() {
         db = AppDatabase.getInstance(this)
         Log.d(className, "view in response to alarm")
 
+        makeRingingScreenAppearWhenLockedOverKeyguard()
+
         savedTimerId = intent.getIntExtra("saved_timer_id", -1)
         if (savedTimerId == -1) {
             Log.d(className, "saved timer id from bundle wasn't found")
             return
         }
-
         scope.launch {
             val savedTimer: SaveableTimer = getSavedTimerFromDb(savedTimerId)
             if (savedTimer.soundFileId != null) {
@@ -49,6 +52,16 @@ class RingingScreen : AppCompatActivity() {
 //        TimerOperations().killIntentAndActiveTimerEntries(this, db, savedTimerId)
         TimerOperations().deactivateActiveTimerEntries(this, db, savedTimerId)
         setHandlers();
+    }
+
+    private fun makeRingingScreenAppearWhenLockedOverKeyguard() {
+        setTurnScreenOn(true)
+        setShowWhenLocked(true)
+        //why did I need to find an example of this being used here instead of in the google docs? https://www.tabnine.com/code/java/classes/android.app.KeyguardManager
+        val keyguardManager = applicationContext.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+        if (keyguardManager.isKeyguardLocked) {
+            keyguardManager.requestDismissKeyguard(this, null)
+        }
     }
 
     private suspend fun getSoundFilePathForId(soundFileId: Int): String {
