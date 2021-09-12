@@ -1,13 +1,7 @@
-save the unique URIs that point to the sound files that we copied into the application directory in another table, so that we can re-use files that were already copied w/o taking up space unnecessarily
-
+deduplicate the active timer panel and the saved timer panel somehow, if it's not a pain in the ass
 active_timers_screen -> add a "deactivate all" button, with a confirmation window
 fragment to display data (especially sound file name, timer name, ring time)
 	you will need to store the sound file name maybe? I think the filename saved in the database is the one made dynamically when it is copied to the app directory
-
-also, files that are saved to the app directory should then be selectable again by the user, I'm worried that copying the same sound file to the directory over and over again will waste space
-
-when the alarm rings, it doesn't show up above the lock screen (the screen just stays black)
-
 the timing may be off by about a minute somehow...
 
 you need to add start times and ringing times columns to the active timers table

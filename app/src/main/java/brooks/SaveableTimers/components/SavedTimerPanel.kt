@@ -114,7 +114,9 @@ class SavedTimerPanel(): Fragment(R.layout.saved_timer_panel) {
         savedTimerDuration = arguments?.getInt("duration") ?: 0
 
         binding.nameField.text = savedTimerName
+        binding.nameField.isSelected = true
         binding.descriptionField.text = savedTimerDescription
+        binding.descriptionField.isSelected = true
         binding.durationField.text = savedTimerDuration.toString()
     }
 
