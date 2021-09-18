@@ -1,1 +1,2 @@
 I made a reddit post involving a problem that I had with my application not being able to launch an activity from the background(receiver), and got a very helpful response from vcjkd
+https://www.reddit.com/r/androiddev/comments/pqg5l6/alarm_clock_apps_and_full_screen_activity/
