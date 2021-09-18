@@ -30,25 +30,25 @@ class SavedTimerReceiver : BroadcastReceiver() {
         launchViewIntent.putExtra(SavedTimersScreen.RINGER_INTENT_TIMER_ID, savedTimerId)
         launchViewIntent.flags = FLAG_ACTIVITY_NEW_TASK
         Log.d(className, launchViewIntent.toString())
-        val channelId = "somethingsomething"
-        val pendingLaunchViewIntent = PendingIntent.getActivity(context, savedTimerId, launchViewIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-        //startActivity(context, launchViewIntent, null)
-        val notificationBuilder = NotificationCompat.Builder(context, channelId)
-            .setSmallIcon(R.drawable.ic_android_black_24dp)
-            .setContentTitle("why do I need to do this I just want to launch an activity")
-            .setAutoCancel(true)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setFullScreenIntent(pendingLaunchViewIntent, true)
-
-        val notificationManager = context.getSystemService(NotificationManager::class.java)
-        notificationManager.createNotificationChannel(
-            NotificationChannel(
-                channelId,
-                "somethingelse",
-                NotificationManager.IMPORTANCE_HIGH
-            )
-        )
-        val finalNotification = notificationBuilder.build()
-        notificationManager.notify(savedTimerId, finalNotification)
+//        val channelId = "somethingsomething"
+//        val pendingLaunchViewIntent = PendingIntent.getActivity(context, savedTimerId, launchViewIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+//        //startActivity(context, launchViewIntent, null)
+//        val notificationBuilder = NotificationCompat.Builder(context, channelId)
+//            .setSmallIcon(R.drawable.ic_android_black_24dp)
+//            .setContentTitle("why do I need to do this I just want to launch an activity")
+//            .setAutoCancel(true)
+//            .setPriority(NotificationCompat.PRIORITY_HIGH)
+//            .setFullScreenIntent(pendingLaunchViewIntent, true)
+//
+//        val notificationManager = context.getSystemService(NotificationManager::class.java)
+//        notificationManager.createNotificationChannel(
+//            NotificationChannel(
+//                channelId,
+//                "somethingelse",
+//                NotificationManager.IMPORTANCE_HIGH
+//            )
+//        )
+//        val finalNotification = notificationBuilder.build()
+//        notificationManager.notify(savedTimerId, finalNotification)
     }
 }
