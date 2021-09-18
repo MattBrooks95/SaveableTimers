@@ -33,29 +33,32 @@ class SavedTimerReceiver : BroadcastReceiver() {
         //the fact that i need to work around it like this is really stupid
         //the user has to tap a tiny notification tray in order for the ALARM app to show the big, easy to hit button to STOP THE ALARM
         //can't make it up
-//        startActivity(context, launchViewIntent, null)
-        val channelId = "somethingsomething"
-        val pendingLaunchViewIntent = PendingIntent.getActivity(context, savedTimerId, launchViewIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        startActivity(context, launchViewIntent, null)
+        //all of this is unnecessary if you use setAlarmClock to activate the alarm.
+        //Reddit user vcjkd posed a helpful response on a thread that I had made that helped me solve this issue
+        //https://www.reddit.com/r/androiddev/comments/pqg5l6/alarm_clock_apps_and_full_screen_activity/
+//        val channelId = "somethingsomething"
+//        val pendingLaunchViewIntent = PendingIntent.getActivity(context, savedTimerId, launchViewIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         //startActivity(context, launchViewIntent, null)
-        val notificationBuilder = NotificationCompat.Builder(context, channelId)
-            .setSmallIcon(R.drawable.ic_android_black_24dp)//It needs to have an icon or it will error out...
-//            .setContentTitle("why do I need to do this I just want to launch an activity")
-            .setContentTitle("SaveableTimer")// but my activity has the text I want to show...
-            .setAutoCancel(true)//cancel as soon as they tap the nofication
-            //makes it so that android is more likely to show the notification regardless  of the state of the phone
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            //finally launch the activity that should have just simply been launched at the beginning...
-            .setFullScreenIntent(pendingLaunchViewIntent, true)
-
-        val notificationManager = context.getSystemService(NotificationManager::class.java)
-        notificationManager.createNotificationChannel(
-            NotificationChannel(
-                channelId,
-                "somethingelse",
-                NotificationManager.IMPORTANCE_HIGH
-            )
-        )
-        val finalNotification = notificationBuilder.build()
-        notificationManager.notify(savedTimerId, finalNotification)
+//        val notificationBuilder = NotificationCompat.Builder(context, channelId)
+//            .setSmallIcon(R.drawable.ic_android_black_24dp)//It needs to have an icon or it will error out...
+////            .setContentTitle("why do I need to do this I just want to launch an activity")
+//            .setContentTitle("SaveableTimer")// but my activity has the text I want to show...
+//            .setAutoCancel(true)//cancel as soon as they tap the nofication
+//            //makes it so that android is more likely to show the notification regardless  of the state of the phone
+//            .setPriority(NotificationCompat.PRIORITY_HIGH)
+//            //finally launch the activity that should have just simply been launched at the beginning...
+//            .setFullScreenIntent(pendingLaunchViewIntent, true)
+//
+//        val notificationManager = context.getSystemService(NotificationManager::class.java)
+//        notificationManager.createNotificationChannel(
+//            NotificationChannel(
+//                channelId,
+//                "somethingelse",
+//                NotificationManager.IMPORTANCE_HIGH
+//            )
+//        )
+//        val finalNotification = notificationBuilder.build()
+//        notificationManager.notify(savedTimerId, finalNotification)
     }
 }

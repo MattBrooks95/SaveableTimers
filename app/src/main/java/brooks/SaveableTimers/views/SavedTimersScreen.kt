@@ -107,20 +107,23 @@ class SavedTimersScreen : AppCompatActivity() {
             val pendingIntent = intent.let { intent ->
                 PendingIntent.getBroadcast(this, savedTimerId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
             }
-
+            val ringMillis = System.currentTimeMillis() + duration * 60000 //60 secs/min * 1000 msecs/sec
             //mins * 60 = seconds, seconds * 1000 = duration in millis
 /*
             alarmManager.set(
                     AlarmManager.RTC_WAKEUP,
-                    System.currentTimeMillis() + duration * 60000,//60 secs/min * 1000 msecs/sec
+                    ringMillis
                     pendingIntent
             )
 */
-            alarmManager.setAndAllowWhileIdle(
-                    AlarmManager.RTC_WAKEUP,
-                    System.currentTimeMillis() + duration.toLong() * 60000,
-                    pendingIntent
-            )
+//            alarmManager.setAndAllowWhileIdle(
+//                    AlarmManager.RTC_WAKEUP,
+//                    System.currentTimeMillis() + duration.toLong() * 60000,
+//                    pendingIntent
+//            )
+            //setAlarmClock allows the receiver to launch a foreground activity
+            val alarmClockInfo = AlarmManager.AlarmClockInfo(ringMillis, null)
+            alarmManager.setAlarmClock(alarmClockInfo, pendingIntent)
 
             val activeTimer = ActiveTimer(0, savedTimerId, true)
             scope.launch {
