@@ -11,6 +11,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.startActivity
 import brooks.SaveableTimers.Intents.IntentFactory
+import brooks.SaveableTimers.R
 import brooks.SaveableTimers.views.RingingScreen
 import brooks.SaveableTimers.views.SavedTimersScreen
 
@@ -33,9 +34,10 @@ class SavedTimerReceiver : BroadcastReceiver() {
         val pendingLaunchViewIntent = PendingIntent.getActivity(context, savedTimerId, launchViewIntent, PendingIntent.FLAG_UPDATE_CURRENT)
         //startActivity(context, launchViewIntent, null)
         val notificationBuilder = NotificationCompat.Builder(context, channelId)
+            .setSmallIcon(R.drawable.ic_android_black_24dp)
             //.setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setFullScreenIntent(pendingLaunchViewIntent, true)
+//            .setFullScreenIntent(pendingLaunchViewIntent, true)
 
         val notificationManager = context.getSystemService(NotificationManager::class.java)
         notificationManager.createNotificationChannel(
