@@ -35,9 +35,10 @@ class SavedTimerReceiver : BroadcastReceiver() {
         //startActivity(context, launchViewIntent, null)
         val notificationBuilder = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(R.drawable.ic_android_black_24dp)
-            //.setAutoCancel(true)
+            .setContentTitle("why do I need to do this I just want to launch an activity")
+            .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-//            .setFullScreenIntent(pendingLaunchViewIntent, true)
+            .setFullScreenIntent(pendingLaunchViewIntent, true)
 
         val notificationManager = context.getSystemService(NotificationManager::class.java)
         notificationManager.createNotificationChannel(
