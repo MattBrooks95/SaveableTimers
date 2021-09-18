@@ -109,9 +109,16 @@ class SavedTimersScreen : AppCompatActivity() {
             }
 
             //mins * 60 = seconds, seconds * 1000 = duration in millis
+/*
             alarmManager.set(
                     AlarmManager.RTC_WAKEUP,
                     System.currentTimeMillis() + duration * 60000,//60 secs/min * 1000 msecs/sec
+                    pendingIntent
+            )
+*/
+            alarmManager.setAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    System.currentTimeMillis() + duration.toLong() * 60000,
                     pendingIntent
             )
 

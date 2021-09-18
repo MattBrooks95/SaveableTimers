@@ -5,3 +5,11 @@ fragment to display data (especially sound file name, timer name, ring time)
 the timing may be off by about a minute somehow...
 
 you need to add start times and ringing times columns to the active timers table
+
+the alarm is not ringing if the application was closed before it rang
+	apparently, since android 10 you NEED to build a notification
+	according to stacked overflow posts, you can make auto canceling notification that launches a fullscreen activity
+	but, right now it just flashes up on the screen and then goes away
+	the alarm receiver is hit but the ringing screen activity is not
+	you should probably just build a regular notification to get a feel for it,
+	then try to get the full screen intent to work

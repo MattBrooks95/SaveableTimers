@@ -27,10 +27,10 @@ class RingingScreen : AppCompatActivity() {
     var savedTimerId: Int = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(className, "view in response to alarm")
         binding = RingingViewBinding.inflate(layoutInflater)
         setContentView(binding.root)
         db = AppDatabase.getInstance(this)
-        Log.d(className, "view in response to alarm")
 
         makeRingingScreenAppearWhenLockedOverKeyguard()
 
