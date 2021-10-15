@@ -31,3 +31,7 @@
         Learning Gradle (or at least be able to use it within Android Studio)
         Learn how to create layouts that are effective even on small screens.
     * I use Windows at my current job, so I want to practice developing in a Linux environment. I prefer Linux anyway.
+
+Thanks
+* A few weeks ago I made a post in the /r/androiddev subreddit, and [vcjkd](https://www.reddit.com/user/vcjkd/) gave me a lot of good, helpful advice.
+    * [post link](https://www.reddit.com/r/androiddev/comments/pqg5l6/alarm_clock_apps_and_full_screen_activity/)
