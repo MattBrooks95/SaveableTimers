@@ -23,6 +23,7 @@ Tools:
     I have not yet learned how to do two-way data binding, but it could be cool.
 
 Goals:
+    I want the app to have a Japanese localization.
     Create an app that I want to use.
     Eventually be able to publish it on the Google Play Store.
     Primarily, learn Android development. This entails:
