@@ -8,12 +8,12 @@
         <entry key="app/src/main/res/layout/activity_create_timer_screen.xml" value="0.14990942028985507" />
         <entry key="app/src/main/res/layout/activity_saved_timers_screen.xml" value="0.14" />
         <entry key="app/src/main/res/layout/ringing_view.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/saved_timer_panel.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/saved_timer_panel.xml" value="0.25" />
       </map>
     </option>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="false" project-jdk-name="11" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SaveableTimers</string>
+    <string name="navigate_create_timer">タイマー作成</string>
+    <string name="navigate_saved_timers">タイマー</string>
+    <string name="create_timer">作成</string>
+    <string name="cancel_create_timer">中止</string>
+    <string name="go_to_active_timers">起動中タイマー</string>
+    <string name="timer_name_field_label">名</string>
+    <string name="timer_name_hint">ノート</string>
+    <string name="timer_duration_entry_hint">間</string>
+    <string name="dismiss_button">OK</string>
+    <string name="pick_file_for_timer">タイマー音を選択</string>
+    <string name="use_default_file_for_timer">デフォルト音を使う</string>
+    <string name="reuse_previous_sound_file">前回の音</string>
+    <string name="deactivate">中止</string>
+    <string name="ring_time">時間</string>
+    <string name="activate_timer">起動</string>
+    <string name="edit_timer">編集</string>
+    <string name="delete_timer">削除</string>
+    <string name="description">ノート</string>
+</resources>

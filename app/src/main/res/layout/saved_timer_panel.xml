@@ -10,7 +10,7 @@
         android:id="@+id/toggle_active_button"
         android:layout_width="40dp"
         android:layout_height="match_parent"
-        android:text="A"
+        android:text="@string/activate_timer"
         app:layout_flexGrow="0.1"/>
     <LinearLayout
         android:orientation="vertical"
@@ -21,7 +21,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Name"
+            android:text="@string/timer_name_field_label"
             android:textFontWeight="8"
             />
         <TextView
@@ -62,7 +62,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Description"
+            android:text="@string/timer_name_hint"
             android:textFontWeight="8"
             />
         <TextView
@@ -78,14 +78,14 @@
         android:id="@+id/edit_button"
         android:layout_width="40dp"
         android:layout_height="match_parent"
-        android:text="E"
+        android:text="@string/edit_timer"
         app:layout_flexGrow="0.1"
         android:layout_marginStart="5dp"/>
     <com.google.android.material.button.MaterialButton
         android:id="@+id/delete_button"
         android:layout_width="40dp"
         android:layout_height="match_parent"
-        android:text="X"
+        android:text="@string/delete_timer"
         app:layout_flexGrow="0.1"
         android:layout_marginStart="5dp"/>
 
