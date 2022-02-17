@@ -3,12 +3,12 @@ package brooks.SaveableTimers.views
 import android.os.Bundle
 import android.util.Log
 import android.widget.LinearLayout
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import brooks.SaveableTimers.Intents.IntentFactory
 import brooks.SaveableTimers.Operations.TimerOperations
 import brooks.SaveableTimers.R
+import brooks.SaveableTimers.brooks.SaveableTimers.views.SaveableTimersBaseActivity
 import brooks.SaveableTimers.components.ActiveTimerPanel
 import brooks.SaveableTimers.data.AppDatabase
 import brooks.SaveableTimers.data.SaveableTimer
@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 
 private lateinit var binding: ActiveTimersScreenBinding
 
-class ActiveTimersScreen: AppCompatActivity() {
+class ActiveTimersScreen : SaveableTimersBaseActivity() {
     private lateinit var db: AppDatabase;
     private val className: String = "ActiveTimersScreen"
     private var timerViewMap: MutableMap<Int, ActiveTimerPanel> = mutableMapOf()

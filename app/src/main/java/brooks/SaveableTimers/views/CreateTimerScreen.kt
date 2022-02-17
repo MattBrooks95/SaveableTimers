@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import brooks.SaveableTimers.Intents.IntentFactory
+import brooks.SaveableTimers.brooks.SaveableTimers.views.SaveableTimersBaseActivity
 import brooks.SaveableTimers.data.AppDatabase
 import brooks.SaveableTimers.data.SaveableTimer
 import brooks.SaveableTimers.data.SoundFile
@@ -28,7 +29,7 @@ import java.io.InputStream
 
 private lateinit var binding: ActivityCreateTimerScreenBinding
 
-class CreateTimerScreen : AppCompatActivity() {
+class CreateTimerScreen : SaveableTimersBaseActivity() {
     private var scope: CoroutineScope = MainScope()
     private val className: String = "CreateTimerScreen"
     lateinit var db: AppDatabase
