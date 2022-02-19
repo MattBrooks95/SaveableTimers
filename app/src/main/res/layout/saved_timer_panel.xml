@@ -5,24 +5,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    app:justifyContent="space_between">
+    app:justifyContent="space_between"
+    app:flexWrap="nowrap">
     <com.google.android.material.button.MaterialButton
         android:id="@+id/toggle_active_button"
-        android:layout_width="40dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:textSize="10dp"
         android:text="@string/activate_timer"
-        app:layout_flexGrow="0.1"/>
+        android:minWidth="0dp"
+        app:layout_flexGrow="1"
+        />
     <LinearLayout
         android:orientation="vertical"
         android:layout_height="match_parent"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_marginStart="5dp"
-        app:layout_flexGrow="0.75">
+        >
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/timer_name_field_label"
             android:textFontWeight="8"
+            android:maxLines="1"
             />
         <TextView
             android:id="@+id/name_field"
@@ -36,14 +41,14 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_height="match_parent"
-        android:layout_width="0dp"
-        app:layout_flexGrow="1"
+        android:layout_width="wrap_content"
         android:layout_marginStart="5dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/timer_duration_entry_hint"
             android:textFontWeight="8"
+            android:maxLines="1"
             />
         <TextView
             android:id="@+id/duration_field"
@@ -56,14 +61,14 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_height="match_parent"
-        android:layout_width="0dp"
-        app:layout_flexGrow="1"
+        android:layout_width="wrap_content"
         android:layout_marginStart="5dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/description"
             android:textFontWeight="8"
+            android:maxLines="1"
             />
         <TextView
             android:id="@+id/description_field"
@@ -76,17 +81,23 @@
     </LinearLayout>
     <com.google.android.material.button.MaterialButton
         android:id="@+id/edit_button"
-        android:layout_width="40dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:textSize="10dp"
         android:text="@string/edit_timer"
-        app:layout_flexGrow="0.1"
-        android:layout_marginStart="5dp"/>
+        android:layout_marginStart="5dp"
+        android:maxLines="1"
+        android:minWidth="0dp"
+        app:layout_flexGrow="1"
+        />
     <com.google.android.material.button.MaterialButton
         android:id="@+id/delete_button"
-        android:layout_width="40dp"
+        android:layout_width="wrap_content"
+        android:textSize="10dp"
         android:layout_height="match_parent"
         android:text="@string/delete_timer"
-        app:layout_flexGrow="0.1"
-        android:layout_marginStart="5dp"/>
+        android:layout_marginStart="5dp"
+        android:minWidth="0dp"
+        app:layout_flexGrow="1"/>
 
 </com.google.android.flexbox.FlexboxLayout>

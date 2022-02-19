@@ -8,7 +8,7 @@
         <entry key="app/src/main/res/layout/activity_create_timer_screen.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_saved_timers_screen.xml" value="0.25" />
         <entry key="app/src/main/res/layout/ringing_view.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/saved_timer_panel.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/saved_timer_panel.xml" value="0.33" />
       </map>
     </option>
   </component>
