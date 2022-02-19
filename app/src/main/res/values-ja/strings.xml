@@ -7,7 +7,6 @@
     <string name="cancel_create_timer">中止</string>
     <string name="go_to_active_timers">起動中タイマー</string>
     <string name="timer_name_field_label">名</string>
-    <string name="timer_name_hint">ノート</string>
     <string name="timer_duration_entry_hint">間</string>
     <string name="dismiss_button">OK</string>
     <string name="pick_file_for_timer">タイマー音を選択</string>

@@ -62,7 +62,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/timer_name_hint"
+            android:text="@string/description"
             android:textFontWeight="8"
             />
         <TextView

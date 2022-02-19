@@ -50,7 +50,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:hint="@string/timer_name_hint"></com.google.android.material.textfield.TextInputEditText>
+                android:hint="@string/description"></com.google.android.material.textfield.TextInputEditText>
         </com.google.android.material.textfield.TextInputLayout>
         <LinearLayout
             android:orientation="vertical"
@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/pick_file_for_timer"
                 android:id="@+id/select_sound_file_button" />
-            <com.google.android.material.button.MaterialButton
+            <!--<com.google.android.material.button.MaterialButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/use_default_file_for_timer"
@@ -70,7 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/reuse_previous_sound_file"
-                android:id="@+id/select_previous_sound_file"/>
+                android:id="@+id/select_previous_sound_file"/>-->
         </LinearLayout>
     </LinearLayout>
     <com.google.android.material.button.MaterialButton
