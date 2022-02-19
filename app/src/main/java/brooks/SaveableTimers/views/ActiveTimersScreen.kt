@@ -2,7 +2,9 @@ package brooks.SaveableTimers.views
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import brooks.SaveableTimers.Intents.IntentFactory
@@ -19,10 +21,11 @@ import kotlinx.coroutines.launch
 private lateinit var binding: ActiveTimersScreenBinding
 
 class ActiveTimersScreen : SaveableTimersBaseActivity() {
-    private lateinit var db: AppDatabase;
+    private lateinit var db: AppDatabase
     private val className: String = "ActiveTimersScreen"
     private var timerViewMap: MutableMap<Int, ActiveTimerPanel> = mutableMapOf()
     private val scope = MainScope()
+    private lateinit var debugView: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActiveTimersScreenBinding.inflate(layoutInflater)
@@ -36,6 +39,8 @@ class ActiveTimersScreen : SaveableTimersBaseActivity() {
                 0.25f
         )
         newLayoutParams.bottomMargin = 5
+        debugView = TextView(applicationContext)
+        binding.root.addView(debugView)
     }
 
     override fun onStart() {
@@ -47,7 +52,8 @@ class ActiveTimersScreen : SaveableTimersBaseActivity() {
                     remove(it.value)
                 }
                 timerViewMap.clear()
-                timers.forEachIndexed { index, timer ->
+                timers.forEach { timer ->
+                //timers.forEachIndexed { index, timer ->
                     val bundle = Bundle()
                     bundle.putString("name", timer.displayName)
                     bundle.putString("description", timer.description)
@@ -88,8 +94,8 @@ class ActiveTimersScreen : SaveableTimersBaseActivity() {
         val toSavedTimersScreenButton = binding.navigateSavedTimersButton
         toSavedTimersScreenButton.setOnClickListener {
             Log.d(className, "go to saved timers screen")
-            val goToSavedTimersScreenIntent = IntentFactory().makeGoToSavedTimersScreenIntent(this)
-            startActivity(goToSavedTimersScreenIntent);
+            //val goToSavedTimersScreenIntent = IntentFactory().makeGoToSavedTimersScreenIntent(this)
+            //startActivity(goToSavedTimersScreenIntent);
         }
     }
 }

@@ -32,6 +32,7 @@ class SavedTimersScreen : SaveableTimersBaseActivity() {
     private val scope = MainScope()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(className, "saved timers screen localeList:${resources.configuration.locales.get(0)} default:${resources.configuration.locale}")
         binding = ActivitySavedTimersScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setHandlers()
