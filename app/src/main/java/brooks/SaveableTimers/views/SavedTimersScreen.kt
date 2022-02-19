@@ -23,7 +23,6 @@ import kotlinx.coroutines.launch
 
 private lateinit var binding: ActivitySavedTimersScreenBinding
 
-
 class SavedTimersScreen : SaveableTimersBaseActivity() {
     lateinit var db: AppDatabase
     private val className: String = "SavedTimersScreen"
@@ -32,7 +31,7 @@ class SavedTimersScreen : SaveableTimersBaseActivity() {
     private val scope = MainScope()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(className, "saved timers screen localeList:${resources.configuration.locales.get(0)} default:${resources.configuration.locale}")
+        //Log.d(className, "saved timers screen localeList:${resources.configuration.locales.get(0)} default:${resources.configuration.locale}")
         binding = ActivitySavedTimersScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setHandlers()

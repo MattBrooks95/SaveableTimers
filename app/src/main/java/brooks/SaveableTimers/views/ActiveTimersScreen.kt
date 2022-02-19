@@ -2,7 +2,6 @@ package brooks.SaveableTimers.views
 
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
