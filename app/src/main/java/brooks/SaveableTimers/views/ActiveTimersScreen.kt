@@ -83,19 +83,19 @@ class ActiveTimersScreen : SaveableTimersBaseActivity() {
     }
 
     private fun setHandlers() {
-        Log.d(className, "setHandlers")
+        //Log.d(className, "setHandlers")
         val toCreateTimerScreenButton = binding.navigateCreateTimerButton
         toCreateTimerScreenButton.setOnClickListener {
-            Log.d(className, "Go to make timer screen")
+            //Log.d(className, "Go to make timer screen")
             val goToCreateTimerIntent = IntentFactory().makeGoToCreateTimerScreenIntent(this)
             startActivity(goToCreateTimerIntent)
         }
 
         val toSavedTimersScreenButton = binding.navigateSavedTimersButton
         toSavedTimersScreenButton.setOnClickListener {
-            Log.d(className, "go to saved timers screen")
-            //val goToSavedTimersScreenIntent = IntentFactory().makeGoToSavedTimersScreenIntent(this)
-            //startActivity(goToSavedTimersScreenIntent);
+           // Log.d(className, "go to saved timers screen")
+            val goToSavedTimersScreenIntent = IntentFactory().makeGoToSavedTimersScreenIntent(this)
+            startActivity(goToSavedTimersScreenIntent);
         }
     }
 }
