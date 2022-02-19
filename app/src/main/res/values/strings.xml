@@ -14,4 +14,9 @@
     <string name="reuse_previous_sound_file">Select Previous Sound File</string>
     <string name="ring_time">Ring Time</string>
     <string name="deactivate">D</string>
+    <string name="activate_timer">A</string>
+    <string name="edit_timer">E</string>
+    <string name="delete_timer">D</string>
+    <string name="description">Description</string>
+    <string name="japanese_language" translatable="false">日本語</string>
 </resources>

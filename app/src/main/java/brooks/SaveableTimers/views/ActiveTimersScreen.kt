@@ -2,13 +2,15 @@ package brooks.SaveableTimers.views
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.LinearLayout
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import brooks.SaveableTimers.Intents.IntentFactory
 import brooks.SaveableTimers.Operations.TimerOperations
 import brooks.SaveableTimers.R
+import brooks.SaveableTimers.brooks.SaveableTimers.views.SaveableTimersBaseActivity
 import brooks.SaveableTimers.components.ActiveTimerPanel
 import brooks.SaveableTimers.data.AppDatabase
 import brooks.SaveableTimers.data.SaveableTimer
@@ -18,11 +20,12 @@ import kotlinx.coroutines.launch
 
 private lateinit var binding: ActiveTimersScreenBinding
 
-class ActiveTimersScreen: AppCompatActivity() {
-    private lateinit var db: AppDatabase;
+class ActiveTimersScreen : SaveableTimersBaseActivity() {
+    private lateinit var db: AppDatabase
     private val className: String = "ActiveTimersScreen"
     private var timerViewMap: MutableMap<Int, ActiveTimerPanel> = mutableMapOf()
     private val scope = MainScope()
+    private lateinit var debugView: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActiveTimersScreenBinding.inflate(layoutInflater)
@@ -36,6 +39,8 @@ class ActiveTimersScreen: AppCompatActivity() {
                 0.25f
         )
         newLayoutParams.bottomMargin = 5
+        debugView = TextView(applicationContext)
+        binding.root.addView(debugView)
     }
 
     override fun onStart() {
@@ -47,7 +52,8 @@ class ActiveTimersScreen: AppCompatActivity() {
                     remove(it.value)
                 }
                 timerViewMap.clear()
-                timers.forEachIndexed { index, timer ->
+                timers.forEach { timer ->
+                //timers.forEachIndexed { index, timer ->
                     val bundle = Bundle()
                     bundle.putString("name", timer.displayName)
                     bundle.putString("description", timer.description)
@@ -77,17 +83,17 @@ class ActiveTimersScreen: AppCompatActivity() {
     }
 
     private fun setHandlers() {
-        Log.d(className, "setHandlers")
+        //Log.d(className, "setHandlers")
         val toCreateTimerScreenButton = binding.navigateCreateTimerButton
         toCreateTimerScreenButton.setOnClickListener {
-            Log.d(className, "Go to make timer screen")
+            //Log.d(className, "Go to make timer screen")
             val goToCreateTimerIntent = IntentFactory().makeGoToCreateTimerScreenIntent(this)
             startActivity(goToCreateTimerIntent)
         }
 
         val toSavedTimersScreenButton = binding.navigateSavedTimersButton
         toSavedTimersScreenButton.setOnClickListener {
-            Log.d(className, "go to saved timers screen")
+           // Log.d(className, "go to saved timers screen")
             val goToSavedTimersScreenIntent = IntentFactory().makeGoToSavedTimersScreenIntent(this)
             startActivity(goToSavedTimersScreenIntent);
         }

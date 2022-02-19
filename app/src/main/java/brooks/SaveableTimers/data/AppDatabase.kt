@@ -27,6 +27,5 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java, "database-name"
             ).fallbackToDestructiveMigration().build()
         }
-
     }
 }

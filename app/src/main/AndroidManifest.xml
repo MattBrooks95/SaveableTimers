@@ -11,10 +11,10 @@
         android:theme="@style/Theme.MyApplication">
         <activity android:name=".views.SavedTimersScreen" />
         <activity android:name=".views.CreateTimerScreen" />
+        <activity android:name=".brooks.SaveableTimers.views.SaveableTimersBaseActivity" />
         <activity android:name=".views.ActiveTimersScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

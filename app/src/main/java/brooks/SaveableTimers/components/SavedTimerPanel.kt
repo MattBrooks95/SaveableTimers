@@ -72,13 +72,13 @@ class SavedTimerPanel(): Fragment(R.layout.saved_timer_panel) {
     private fun setButtonStateForActive() {
         binding.editButton.isEnabled = false
         binding.deleteButton.isEnabled = false
-        binding.toggleActiveButton.text = "D"
+        binding.toggleActiveButton.text = context?.getString(R.string.deactivate)
     }
 
     private fun setButtonStateForNotActive() {
         binding.editButton.isEnabled = true
         binding.deleteButton.isEnabled = true
-        binding.toggleActiveButton.text = "A"
+        binding.toggleActiveButton.text = context?.getString(R.string.activate_timer)
     }
 
 
@@ -134,8 +134,6 @@ class SavedTimerPanel(): Fragment(R.layout.saved_timer_panel) {
         isActivated = false
     }
 
-
-//
     fun setDeleteButtonCallbackProperty(onClick: (uid: Int) -> Unit) {
         deleteCallback = onClick
     }

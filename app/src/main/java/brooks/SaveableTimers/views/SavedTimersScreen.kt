@@ -13,6 +13,7 @@ import brooks.SaveableTimers.Operations.TimerOperations
 import brooks.SaveableTimers.R
 import brooks.SaveableTimers.androidWrappers.AlarmWrapper
 import brooks.SaveableTimers.androidWrappers.SavedTimerReceiver
+import brooks.SaveableTimers.brooks.SaveableTimers.views.SaveableTimersBaseActivity
 import brooks.SaveableTimers.components.SavedTimerPanel
 import brooks.SaveableTimers.data.*
 
@@ -23,7 +24,7 @@ import kotlinx.coroutines.launch
 private lateinit var binding: ActivitySavedTimersScreenBinding
 
 
-class SavedTimersScreen : AppCompatActivity() {
+class SavedTimersScreen : SaveableTimersBaseActivity() {
     lateinit var db: AppDatabase
     private val className: String = "SavedTimersScreen"
     private var timerViewMap: MutableMap<Int, SavedTimerPanel> = mutableMapOf()
@@ -31,6 +32,7 @@ class SavedTimersScreen : AppCompatActivity() {
     private val scope = MainScope()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(className, "saved timers screen localeList:${resources.configuration.locales.get(0)} default:${resources.configuration.locale}")
         binding = ActivitySavedTimersScreenBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setHandlers()
