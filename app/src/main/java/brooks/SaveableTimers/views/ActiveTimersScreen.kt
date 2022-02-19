@@ -11,6 +11,7 @@ import brooks.SaveableTimers.Operations.TimerOperations
 import brooks.SaveableTimers.R
 import brooks.SaveableTimers.brooks.SaveableTimers.views.SaveableTimersBaseActivity
 import brooks.SaveableTimers.components.ActiveTimerPanel
+import brooks.SaveableTimers.components.SavedTimerPanel
 import brooks.SaveableTimers.data.AppDatabase
 import brooks.SaveableTimers.data.SaveableTimer
 import brooks.SaveableTimers.databinding.ActiveTimersScreenBinding
@@ -22,7 +23,7 @@ private lateinit var binding: ActiveTimersScreenBinding
 class ActiveTimersScreen : SaveableTimersBaseActivity() {
     private lateinit var db: AppDatabase
     private val className: String = "ActiveTimersScreen"
-    private var timerViewMap: MutableMap<Int, ActiveTimerPanel> = mutableMapOf()
+    private var timerViewMap: MutableMap<Int, SavedTimerPanel> = mutableMapOf()
     private val scope = MainScope()
     private lateinit var debugView: TextView
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,14 +55,16 @@ class ActiveTimersScreen : SaveableTimersBaseActivity() {
                 timers.forEach { timer ->
                 //timers.forEachIndexed { index, timer ->
                     val bundle = Bundle()
-                    bundle.putString("name", timer.displayName)
-                    bundle.putString("description", timer.description)
+                    //bundle.putString("name", timer.displayName)
+                    //bundle.putString("description", timer.description)
                     bundle.putInt("id", timer.uid)
-                    bundle.putInt("ringTime", 1776)//TODO actual ring time
+                    //bundle.putInt("ringTime", 1776)//TODO actual ring time
                     Log.d(className, "added active timer panel with id:${timer.uid}")
                     setReorderingAllowed(true)
                     //why can't I do this like the tutorial? in the tutorial the add method lets you pass the bundle
-                    val newFragment = ActiveTimerPanel()
+                    //val newFragment = ActiveTimerPanel()
+                    bundle.putBoolean("is_active_panel", true)
+                    val newFragment = SavedTimerPanel()
                     newFragment.arguments = bundle
                     newFragment.setDeactivateButtonCallback(::deactivateTimer)
                     add(R.id.active_timers_container, newFragment)
@@ -72,12 +75,13 @@ class ActiveTimersScreen : SaveableTimersBaseActivity() {
     }
 
     private fun deactivateTimer(savedTimerId: Int) {
+        Log.d(className, "deactivate timer with ID:$savedTimerId")
         TimerOperations().killIntentAndActiveTimerEntries(this, db, savedTimerId)
-        val savedTimerView = timerViewMap.get(savedTimerId)
+        val savedTimerView = timerViewMap[savedTimerId]
         supportFragmentManager.commit {
-            supportFragmentManager.commit {
+            //supportFragmentManager.commit {
                 remove(savedTimerView as Fragment)
-            }
+            //}
         }
     }
 
