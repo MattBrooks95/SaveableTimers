@@ -95,13 +95,13 @@ class CreateTimerScreen : SaveableTimersBaseActivity() {
             resultLauncher.launch("audio/*")
         }
 
-        binding.useDefaultSoundFileButton.setOnClickListener {
-            Log.d(className, "TODO")
-        }
+        //binding.useDefaultSoundFileButton.setOnClickListener {
+        //    Log.d(className, "TODO")
+        //}
 
-        binding.selectPreviousSoundFile.setOnClickListener {
-            Log.d(className, "TODO")
-        }
+        //binding.selectPreviousSoundFile.setOnClickListener {
+        //    Log.d(className, "TODO")
+        //}
     }
 
     var resultLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->

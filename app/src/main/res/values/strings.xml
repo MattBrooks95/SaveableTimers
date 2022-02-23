@@ -6,7 +6,6 @@
     <string name="cancel_create_timer">cancel</string>
     <string name="go_to_active_timers">Active Timers</string>
     <string name="timer_name_field_label">Name</string>
-    <string name="timer_name_hint">Description</string>
     <string name="timer_duration_entry_hint">Duration (m)</string>
     <string name="dismiss_button">Dismiss</string>
     <string name="pick_file_for_timer">Select New Sound File</string>
@@ -17,6 +16,6 @@
     <string name="activate_timer">A</string>
     <string name="edit_timer">E</string>
     <string name="delete_timer">D</string>
-    <string name="description">Description</string>
+    <string name="description">Memo</string>
     <string name="japanese_language" translatable="false">日本語</string>
 </resources>

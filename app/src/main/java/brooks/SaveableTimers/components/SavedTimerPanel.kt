@@ -1,16 +1,19 @@
 package brooks.SaveableTimers.components
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import brooks.SaveableTimers.R
 import brooks.SaveableTimers.databinding.SavedTimerPanelBinding
+import com.google.android.material.button.MaterialButton
 
 
 class SavedTimerPanel(): Fragment(R.layout.saved_timer_panel) {
 
+    private val className = "SavedTimerPanel"
     lateinit var savedTimerName: String
     lateinit var savedTimerDescription: String
     private var savedTimerId: Int = 0
@@ -31,6 +34,7 @@ class SavedTimerPanel(): Fragment(R.layout.saved_timer_panel) {
 
     private var isActivated: Boolean = false
         set(newIsActivated) {
+            Log.d(className, "set is activated:$isActivated")
             field = newIsActivated
             updateStateToReflectActivationStatus()
         }
@@ -41,6 +45,17 @@ class SavedTimerPanel(): Fragment(R.layout.saved_timer_panel) {
         savedInstanceState: Bundle?
     ): View? {
         _binding = SavedTimerPanelBinding.inflate(inflater, container, false)
+        arguments?.getBoolean("is_active_panel")?.let {
+            if (it) {
+                binding.root.removeView(binding.root.rootView.findViewById(R.id.delete_button))
+                binding.root.removeView(binding.root.rootView.findViewById(R.id.edit_button))
+                //TODO seems like a stupid way to move the button over to the right....
+                val deactivateButton: MaterialButton  = binding.root.rootView.findViewById(R.id.toggle_active_button)
+                binding.root.removeView(deactivateButton)
+                binding.root.addView(deactivateButton)
+                this.initialActiveValue = true
+            }
+        }
         return binding.root
     }
 
