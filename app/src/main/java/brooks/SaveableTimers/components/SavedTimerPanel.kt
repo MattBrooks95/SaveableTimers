@@ -49,10 +49,11 @@ class SavedTimerPanel(): Fragment(R.layout.saved_timer_panel) {
             if (it) {
                 binding.root.removeView(binding.root.rootView.findViewById(R.id.delete_button))
                 binding.root.removeView(binding.root.rootView.findViewById(R.id.edit_button))
+                //TODO seems like a stupid way to move the button over to the right....
+                val deactivateButton: MaterialButton  = binding.root.rootView.findViewById(R.id.toggle_active_button)
+                binding.root.removeView(deactivateButton)
+                binding.root.addView(deactivateButton)
                 this.initialActiveValue = true
-                //val activateButton: MaterialButton = binding.root.findViewById(R.id.toggle_active_button)
-                //activateButton.text = resources.getString(R.string.deactivate)
-                //isActivated = true
             }
         }
         return binding.root
