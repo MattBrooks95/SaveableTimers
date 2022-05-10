@@ -70,10 +70,6 @@ class SavedTimerPanel(): Fragment(R.layout.saved_timer_panel) {
         _binding = null
     }
 
-    fun setActiveStatusFromOutside(newIsActivated: Boolean) {
-        isActivated = newIsActivated
-    }
-
     private fun updateStateToReflectActivationStatus() {
         if (isActivated) {
             setButtonStateForActive()
@@ -98,13 +94,15 @@ class SavedTimerPanel(): Fragment(R.layout.saved_timer_panel) {
 
 
     private fun setHandlers() {
-        if (::deleteCallback.isInitialized && !binding.deleteButton.hasOnClickListeners()) {//TODO this could cause a bug if it was meant to have multiple listeners
+        //TODO this could cause a bug if it was meant to have multiple listeners
+        if (::deleteCallback.isInitialized && !binding.deleteButton.hasOnClickListeners()) {
             binding.deleteButton.setOnClickListener {
                 deleteCallback?.invoke(savedTimerId)
             }
         }
 
-        if (::editCallback.isInitialized && !binding.editButton.hasOnClickListeners()) {//TODO this could cause a bug if it was meant to have multiple listeners
+        //TODO this could cause a bug if it was meant to have multiple listeners
+        if (::editCallback.isInitialized && !binding.editButton.hasOnClickListeners()) {
             binding.editButton.setOnClickListener {
                 editCallback?.invoke(savedTimerId)
             }
