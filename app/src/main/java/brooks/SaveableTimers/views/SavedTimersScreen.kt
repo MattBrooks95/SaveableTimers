@@ -87,11 +87,21 @@ class SavedTimersScreen : SaveableTimersBaseActivity() {
     //TODO some sort of confirmation?
     private fun deleteSavedTimer(uuid: Int) {
         Log.d(className, "delete uuid:$uuid")
-        val savedTimerPanel = timerViewMap[uuid];
+        val savedTimerPanel = timerViewMap[uuid]
         if (savedTimerPanel !== null) {
+            //remove the element for this timer
             supportFragmentManager.commit {
                 remove(timerViewMap[uuid] as Fragment)
             }
+            scope.launch {
+                //dig the timer we need to delete out of the DB, then delete it if it existed
+                val timerToDelete = db.saveableTimerDao().getSaveableTimerById(uuid)
+                timerToDelete?.let {
+                    db.saveableTimerDao().deleteAll(it)
+                }
+            }
+        } else {
+            Log.e(className, "could not delete timer with id:$uuid")
         }
     }
 
