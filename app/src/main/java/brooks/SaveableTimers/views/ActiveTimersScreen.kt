@@ -34,9 +34,9 @@ class ActiveTimersScreen : SaveableTimersBaseActivity() {
         setHandlers()
 
         val newLayoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                0.25f
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            0.25f
         )
         newLayoutParams.bottomMargin = 5
         debugView = TextView(applicationContext)
@@ -58,8 +58,11 @@ class ActiveTimersScreen : SaveableTimersBaseActivity() {
                     //bundle.putString("name", timer.displayName)
                     //bundle.putString("description", timer.description)
                     bundle.putInt("id", timer.uid)
-                    //bundle.putInt("ringTime", 1776)//TODO actual ring time
-                    Log.d(className, "added active timer panel with id:${timer.uid}")
+                    bundle.putString("name", timer.displayName)
+                    bundle.putString("description", timer.description)
+                    //TODO showing the duration of the timer is pointless, need to show a countdown
+                    bundle.putInt("duration", timer.duration);
+                    //Log.d(className, "added active timer panel with id:${timer.uid}")
                     setReorderingAllowed(true)
                     //why can't I do this like the tutorial? in the tutorial the add method lets you pass the bundle
                     //val newFragment = ActiveTimerPanel()
